@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/helplift/static/css/main.4def66c2.css",
-    "main.js": "/helplift/static/js/main.2be1cf76.js",
+    "main.js": "/helplift/static/js/main.9652718f.js",
     "static/js/453.d93bd665.chunk.js": "/helplift/static/js/453.d93bd665.chunk.js",
     "index.html": "/helplift/index.html",
     "main.4def66c2.css.map": "/helplift/static/css/main.4def66c2.css.map",
-    "main.2be1cf76.js.map": "/helplift/static/js/main.2be1cf76.js.map",
+    "main.9652718f.js.map": "/helplift/static/js/main.9652718f.js.map",
     "453.d93bd665.chunk.js.map": "/helplift/static/js/453.d93bd665.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4def66c2.css",
-    "static/js/main.2be1cf76.js"
+    "static/js/main.9652718f.js"
   ]
 }
