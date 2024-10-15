@@ -7,8 +7,8 @@ const App = () => {
   return (
     <Router basename="/helplift">
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/products/:id" element={<ProductPage />} />
+        <Route path="/helplift/" element={<HomePage />} />
+        <Route path="/helplift/products/:id" element={<ProductPage />} />
       </Routes>
     </Router>
   );
