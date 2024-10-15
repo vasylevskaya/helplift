@@ -5,7 +5,7 @@ import ProductPage from './pages/ProductPage ';
 
 const App = () => {
   return (
-    <Router basename="/helplift">
+    <Router>
       <Routes>
         <Route path="/helplift/" element={<HomePage />} />
         <Route path="/helplift/products/:id" element={<ProductPage />} />
