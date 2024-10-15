@@ -1,0 +1,29 @@
+.section-animated {
+  /* temporary */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightblue;
+  min-height: 100vh;
+  /* temporary */
+}
+
+.section-about-us {
+  /* temporary */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgreen; 
+  min-height: 100vh;
+  /* temporary */
+}
+
+.section-products {
+  /* temporary */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightpink; 
+  min-height: 100vh;
+  /* temporary */
+}
