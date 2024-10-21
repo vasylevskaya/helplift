@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/helplift/static/css/main.2de6317a.css",
-    "main.js": "/helplift/static/js/main.32ba08bc.js",
+    "main.css": "/helplift/static/css/main.acfc42ea.css",
+    "main.js": "/helplift/static/js/main.a65aab90.js",
     "static/js/453.4f8fcf33.chunk.js": "/helplift/static/js/453.4f8fcf33.chunk.js",
     "static/media/scene.png": "/helplift/static/media/scene.55177b91ac8f044b7bcd.png",
     "static/media/1.jpg": "/helplift/static/media/1.3f8135a4a56425a81a32.jpg",
@@ -370,12 +370,12 @@
     "static/media/fa-v4compatibility.ttf": "/helplift/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/helplift/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/helplift/index.html",
-    "main.2de6317a.css.map": "/helplift/static/css/main.2de6317a.css.map",
-    "main.32ba08bc.js.map": "/helplift/static/js/main.32ba08bc.js.map",
+    "main.acfc42ea.css.map": "/helplift/static/css/main.acfc42ea.css.map",
+    "main.a65aab90.js.map": "/helplift/static/js/main.a65aab90.js.map",
     "453.4f8fcf33.chunk.js.map": "/helplift/static/js/453.4f8fcf33.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2de6317a.css",
-    "static/js/main.32ba08bc.js"
+    "static/css/main.acfc42ea.css",
+    "static/js/main.a65aab90.js"
   ]
 }
