@@ -19,9 +19,9 @@ const HomePage = () => {
   return (
     <div className='home-page'>
       <Header openContactForm={() => setContactFormIsVisible(true)} />
-      <AnimatedSection />
-      <AboutUsSection />
       <ImageTextSection />
+      <AboutUsSection />
+      <AnimatedSection />
       <ProductsSection />
       <Footer />
       <ContactForm

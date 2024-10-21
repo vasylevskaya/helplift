@@ -1,5 +1,4 @@
 .home-page {
-  
 }
 
 .section-animated {
@@ -76,14 +75,15 @@
   background-color: white;
   display: grid;
   grid-template-columns: 300px auto;
+  min-height: 100vh;
 }
 
 .section-image-text_content {
   /* position: absolute; */
-  top: 50px;
+  top: 40%;
   left: 50px;
   color: var(--black);
-  padding-top: 50px;
+  padding-top: 40%;
   padding-left: 50px;
   width: 170%;
 }
