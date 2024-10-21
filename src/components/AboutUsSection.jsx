@@ -1,11 +1,19 @@
 import React from 'react';
 import { Element } from 'react-scroll';
+import t from '../assets/text-content.json';
 
 const AboutUsSection = () => {
   return (
     <Element name={'about-us-section'}>
       <div className='section-about-us'>
-        <p>About us Section Placeholder</p>
+        <div className='section-about-us_content'>
+          <h3 className='section-about-us_content_title'>
+            {t['about-us']['heading']}
+          </h3>
+          <p className='section-about-us_content_text'>
+            {t['about-us']['main-text']}
+          </p>
+        </div>
       </div>
     </Element>
   );

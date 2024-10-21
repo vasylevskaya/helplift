@@ -1,9 +1,11 @@
 import React from 'react';
+import ScrollSequence from './ScrollSequence';
 
 const AnimatedSection = () => {
   return (
     <section className='section-animated'>
-      <p>Animated Section Placeholder</p>
+      <div className='section-animated_text'></div>
+      <ScrollSequence />
     </section>
   );
 };

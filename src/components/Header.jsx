@@ -1,5 +1,8 @@
 import React from 'react';
-import { Link } from 'react-scroll';
+import { Button, Link } from 'react-scroll';
+import t from '../assets/text-content.json';
+import logoImg from '../assets/images/logo-white.png';
+import ButtonCircle from '../components/ButtonCircle';
 
 /* стилі для хедера в App.css */
 
@@ -13,10 +16,13 @@ const Header = ({
         spy={true}
         smooth={true}
         offset={-70}
-        duration={500}
-        className='header_logo'
+        duration={300}
       >
-        Logo Placeholder {/* Вставити лого */}
+        <img
+          className='header_logo'
+          src={logoImg}
+          alt='Logo'
+        />
       </Link>
       <nav className='header_nav'>
         <Link
@@ -25,10 +31,10 @@ const Header = ({
           to={'about-us-section'}
           spy={true}
           smooth={true}
-          offset={-70}
-          duration={500}
+          duration={300}
         >
           {'Про нас'}
+          <div className='location-dot' />
         </Link>
         <Link
           className='header_nav_link'
@@ -36,18 +42,16 @@ const Header = ({
           to={'products-section'}
           spy={true}
           smooth={true}
-          offset={-70}
-          duration={500}
+          duration={300}
         >
-          {'Продукти'}
+          {'Підйомники'}
+          <div className='location-dot' />
         </Link>
+        <button className='header_contact' onClick={openContactForm}>
+          <p className='header_contact_text'>{"Зв'язатися"}</p>
+          <ButtonCircle className='white' />
+        </button>
       </nav>
-      <button className='header_contact' onClick={() => {}}> {/* додати функцію для вікриття Contact Form */}
-        <p className='header_contact_text'>{"Зв'язатися"}</p>
-        <div className='header_contact_pseudo-btn'>
-
-        </div>
-      </button>
     </header>
   );
 };
