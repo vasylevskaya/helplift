@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/helplift/static/css/main.acfc42ea.css",
-    "main.js": "/helplift/static/js/main.a65aab90.js",
+    "main.css": "/helplift/static/css/main.d8e2fcdf.css",
+    "main.js": "/helplift/static/js/main.ef1360e9.js",
     "static/js/453.4f8fcf33.chunk.js": "/helplift/static/js/453.4f8fcf33.chunk.js",
     "static/media/scene.png": "/helplift/static/media/scene.55177b91ac8f044b7bcd.png",
     "static/media/1.jpg": "/helplift/static/media/1.3f8135a4a56425a81a32.jpg",
@@ -13,8 +13,8 @@
     "static/media/fa-solid-900.woff2": "/helplift/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
     "static/media/fa-brands-400.woff2": "/helplift/static/media/fa-brands-400.bb8d5a145e22822103fb.woff2",
     "static/media/fa-regular-400.ttf": "/helplift/static/media/fa-regular-400.17a6e1aebccdbaa39e78.ttf",
-    "static/media/logo-white.png": "/helplift/static/media/logo-white.6a8eff646685bef909f9.png",
-    "static/media/logo-black.png": "/helplift/static/media/logo-black.c6f7d508f4d7ba355f1e.png",
+    "static/media/logo-white.png": "/helplift/static/media/logo-white.d80d2b74c36fb15973e0.png",
+    "static/media/logo-black.png": "/helplift/static/media/logo-black.ca92711c39904de50ba1.png",
     "static/media/image003.webp": "/helplift/static/media/image003.0a9a14f04a1455971d45.webp",
     "static/media/image001.webp": "/helplift/static/media/image001.cf944400a09a1c968af1.webp",
     "static/media/image004.webp": "/helplift/static/media/image004.b3b35e50097f4dfa0908.webp",
@@ -368,14 +368,18 @@
     "static/media/image287.webp": "/helplift/static/media/image287.74b8d9b0cb2bcb7bcb98.webp",
     "static/media/image342.webp": "/helplift/static/media/image342.04eab8ca24db2bce915f.webp",
     "static/media/fa-v4compatibility.ttf": "/helplift/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
+    "static/media/viber.svg": "/helplift/static/media/viber.687f6648cbf325c365e3.svg",
     "static/media/fa-v4compatibility.woff2": "/helplift/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
+    "static/media/hamburger.svg": "/helplift/static/media/hamburger.6bcf8d7d237871b10a37ffee988aa8e6.svg",
+    "static/media/telegram.svg": "/helplift/static/media/telegram.3f8a38fcc0470c19f522.svg",
     "index.html": "/helplift/index.html",
-    "main.acfc42ea.css.map": "/helplift/static/css/main.acfc42ea.css.map",
-    "main.a65aab90.js.map": "/helplift/static/js/main.a65aab90.js.map",
+    "static/media/original-arrow-up.svg": "/helplift/static/media/original-arrow-up.8d6ca1aabc460b60448a.svg",
+    "main.d8e2fcdf.css.map": "/helplift/static/css/main.d8e2fcdf.css.map",
+    "main.ef1360e9.js.map": "/helplift/static/js/main.ef1360e9.js.map",
     "453.4f8fcf33.chunk.js.map": "/helplift/static/js/453.4f8fcf33.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.acfc42ea.css",
-    "static/js/main.a65aab90.js"
+    "static/css/main.d8e2fcdf.css",
+    "static/js/main.ef1360e9.js"
   ]
 }
