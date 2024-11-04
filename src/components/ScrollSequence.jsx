@@ -15,6 +15,15 @@ const ScrollSequence = () => {
     images.length - 1 // End of stage 3
   ];
 
+  const preloadImages = (imageUrls) => {
+    imageUrls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+    });
+  };
+
+  preloadImages(images);
+  
   const getScrollPoints = () => {
     if (!sectionRef.current) return [];
   
