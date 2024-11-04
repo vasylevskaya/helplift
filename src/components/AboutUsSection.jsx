@@ -11,7 +11,10 @@ const AboutUsSection = () => {
             {t['about-us']['heading']}
           </h3>
           <p className='section-about-us_content_text'>
-            {t['about-us']['main-text']}
+            {t['about-us']['text-1']}
+          </p>
+          <p className='section-about-us_content_text'>
+            {t['about-us']['text-2']}
           </p>
         </div>
       </div>

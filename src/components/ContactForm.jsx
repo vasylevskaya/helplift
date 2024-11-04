@@ -1,7 +1,7 @@
 import React from 'react';
 import t from '../assets/text-content.json';
 import ButtonCircle from '../components/ButtonCircle';
-import ButtonClose from './ButtonClose';
+import ButtonGradient from './ButtonGradient';
 import ContactData from './ContactData';
 
 const ContactForm = ({
@@ -54,7 +54,12 @@ const ContactForm = ({
         className='contact-form_close-btn'
         onClick={closeForm}
       >
-        <ButtonClose />
+        <ButtonGradient>
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="8.13065" y1="0.353553" x2="0.352479" y2="8.13173" stroke="#ffffff"></line>
+            <line y1="-0.5" x2="11" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 0.7771 0)" stroke="#ffffff"></line>
+          </svg>
+        </ButtonGradient>
       </button>
     </div>
   );

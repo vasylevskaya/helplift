@@ -6,18 +6,18 @@ const ImageTextSection = () => {
   return (
     <div className='section-image-text'>
       <div className='section-image-text_content'>
-        <h3 className='section-image-text_content_title'>
-          {t['about-us']['heading']}
-        </h3>
         <p className='section-image-text_content_text'>
-          {t['about-us']['main-text']}
+          {t['main']['text-1']}
+        </p>
+        <p className='section-image-text_content_text'>
+          {t['main']['text-2']}
         </p>
       </div>
-      <img
+      {/* <img
         className='section-image-text_image'
         src={sceneImg}
         alt='scene'
-      />
+      /> */}
     </div>
   );
 };

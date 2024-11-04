@@ -42,6 +42,7 @@
 }
 
 .section-about-us_content_title {
+  margin: 0 0 15px;
   font-size: 54px;
 }
 
@@ -58,7 +59,7 @@
 }
 
 .section-about-us_content_text {
-  max-width: 500px;
+  /* max-width: 700px; */
   font-size: 18px;
   line-height: 2;
 }
@@ -72,24 +73,20 @@
 /* start section image text */
 .section-image-text {
   position: relative;
+  background: url(../assets/images/scene.png) no-repeat center center;
+  background-size: cover;
   background-color: white;
-  display: grid;
-  grid-template-columns: 300px auto;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .section-image-text_content {
-  /* position: absolute; */
-  top: 40%;
-  left: 50px;
+  padding: 150px 100px 100px;
   color: var(--black);
-  padding-top: 40%;
-  padding-left: 50px;
-  width: 170%;
 }
 
 .section-image-text_content_title {
   font-size: 54px;
+  margin-top: 0;
 }
 
 .section-image-text_content_text {
