@@ -2,7 +2,9 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { scrollSequenceImages as images } from '../assets/scroll-sequence/ScrollSequenceImagesImport';
 
 const ScrollSequence = () => {
+  const intervalRef = useRef(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  let   isAnimated = false;
   const [currentStage, setCurrentStage] = useState(0);
   const currentFrameIndexRef = useRef(0);
   const canvasRef = useRef(null);
@@ -50,50 +52,78 @@ const ScrollSequence = () => {
   };
 
   const scrollToPosition = (position) => {
+    console.log(position)
     window.scrollTo({
       top: position,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
   const animateSequence = useCallback((isScrollDown) => {
+    if (isAnimated) return;
     if (isAnimating) return;
     setIsAnimating(true);
+    isAnimated = true;
     disableScroll();
 
     const targetIndex = isScrollDown
       ? frameIndexesRange[currentStage + 1]
       : frameIndexesRange[currentStage - 1];
-
-    const animate = () => {
-      if (
-        (isScrollDown && currentFrameIndexRef.current >= targetIndex) ||
-        (!isScrollDown && currentFrameIndexRef.current <= targetIndex)
-      ) {
-        const newCurrentStage = isScrollDown
-          ? Math.min(currentStage + 1, totalStages - 1)
-          : Math.max(currentStage - 1, 0);
-
-        const scrollPoints = getScrollPoints();
-        scrollToPosition(scrollPoints[newCurrentStage]);
-
-        setTimeout(() => {
-          enableScroll();
-          setIsAnimating(false);
-          setCurrentStage(newCurrentStage);
-        }, 500);
-        return;
-      }
-
-      const newCurrentIndex = isScrollDown
+      
+    const startAnimation = () => {
+      clearInterval(intervalRef.current);
+      console.log('started phase' + currentStage);
+      const newStage = isScrollDown ? currentStage + 1 : currentStage - 1;
+      const scrollPoints = getScrollPoints();
+      scrollToPosition(scrollPoints[newStage]);
+      intervalRef.current = setInterval(() => {
+        const newCurrentIndex = isScrollDown
         ? currentFrameIndexRef.current + 1
         : currentFrameIndexRef.current - 1;
-      currentFrameIndexRef.current = newCurrentIndex;
-      updateImage(newCurrentIndex);
-      requestAnimationFrame(animate);
-    };
+        if (newCurrentIndex == frameIndexesRange[newStage]) {
+          clearInterval(intervalRef.current);
+          enableScroll();
+          setIsAnimating(false);
+          isAnimated = false;
+          setCurrentStage(isScrollDown ? currentStage + 1 : currentStage - 1);
+          console.log('stopped');
+        }
+        currentFrameIndexRef.current = newCurrentIndex;
+        updateImage(newCurrentIndex);
+      }, 20);
+    }
 
-    animate();
+    // const animate = () => {
+    //   if (
+    //     (isScrollDown && currentFrameIndexRef.current >= targetIndex) ||
+    //     (!isScrollDown && currentFrameIndexRef.current <= targetIndex)
+    //   ) {
+    //     const newCurrentStage = isScrollDown
+    //       ? Math.min(currentStage + 1, totalStages - 1)
+    //       : Math.max(currentStage - 1, 0);
+
+    //     const scrollPoints = getScrollPoints();
+    //     scrollToPosition(scrollPoints[newCurrentStage]);
+
+    //     setTimeout(() => {
+    //       enableScroll();
+    //       setIsAnimating(false);
+    //       setCurrentStage(newCurrentStage);
+    //     }, 500);
+    //     return;
+    //   }
+
+    //   const newCurrentIndex = isScrollDown
+    //     ? currentFrameIndexRef.current + 1
+    //     : currentFrameIndexRef.current - 1;
+    //   currentFrameIndexRef.current = newCurrentIndex;
+    //   updateImage(newCurrentIndex);
+    //   requestAnimationFrame(animate);
+    // };
+
+    // animate();
+    startAnimation();
+
   }, [currentStage, isAnimating]);
 
   const updateImage = useCallback((index) => {
@@ -113,46 +143,57 @@ const ScrollSequence = () => {
     if (isAnimating) return;
 
     const isScrollDown = e.deltaY > 0;
-
     const scrollPoints = getScrollPoints();
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const sectionBottom = sectionRef.current.offsetTop + sectionRef.current.offsetHeight;
     const currentScroll = window.scrollY;
 
-    console.log(currentScroll, scrollPoints)
+    if (isAnimated) {
+      // scrollToPosition(scrollPoints[currentStage]);
+      // console.log('scrolling to ' + scrollPoints[currentStage]);
+      return
+    };
+    // console.log(currentScroll, scrollPoints)
 
-    console.log(currentScroll, lastStageTopPoint, sectionBottom)
+    // console.log(currentScroll, lastStageTopPoint, sectionBottom)
 
-    if (isScrollDown && currentScroll >= lastStageTopPoint && currentScroll < sectionBottom) {
-      console.log('out of animation')
-      disableScroll()
-      scrollToPosition(sectionBottom);
-      setTimeout(() => {
-        enableScroll();
-      }, 500);
-      return;
-    }
+    // if (isScrollDown && currentScroll >= lastStageTopPoint && currentScroll < sectionBottom) {
+    //   console.log('out of animation')
+    //   disableScroll()
+    //   scrollToPosition(sectionBottom);
+    //   setTimeout(() => {
+    //     enableScroll();
+    //   }, 500);
+    //   return;
+    // }
 
-    if (!isScrollDown && currentScroll === sectionBottom) {
-      console.log('in animation')
-      disableScroll()
-      scrollToPosition(lastStageTopPoint);
-      setTimeout(() => {
-        enableScroll();
-      }, 500);
-      return;
-    }
+    // if (!isScrollDown && currentScroll === sectionBottom) {
+    //   console.log('in animation')
+    //   disableScroll()
+    //   scrollToPosition(lastStageTopPoint);
+    //   setTimeout(() => {
+    //     enableScroll();
+    //   }, 500);
+    //   return;
+    // }
 
     // Trigger animation only when scroll position is within the section
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
+      if (currentStage === 0 && !isScrollDown) { // exit from animation section up
+        return;
+      }
+  
       if (
         (currentStage === 0 && !isScrollDown) ||
         (currentStage === totalStages - 1 && isScrollDown)
+        
       ) {
         return;
       }
+
       animateSequence(isScrollDown);
+      isAnimated = true;
     }
   };
 
@@ -173,6 +214,7 @@ const ScrollSequence = () => {
     };
 
     getScrollPoints();
+    return  clearInterval(intervalRef.current);
   }, [images]);
 
   return (
