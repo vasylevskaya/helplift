@@ -84,7 +84,6 @@ const ScrollSequence = () => {
           clearInterval(intervalRef.current);
           enableScroll();
           setIsAnimating(false);
-          setCurrentTextStage(isScrollDown ? Math.min(newStage, 2) : Math.max(newStage, 0));
           setCurrentStage(newStage);
           isAnimated = false;
           console.log('stopped');
