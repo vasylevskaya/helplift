@@ -12,40 +12,46 @@ import CornerButtons from '../components/CornerButtons';
 const HomePage = () => {
   const [contactFormIsVisible, setContactFormIsVisible] = useState(false);
   const [headerClass, setHeaderClass] = useState('dark'); // Start with 'dark'
-  const imageTextRef = useRef(null);
-  const animatedRef = useRef(null);
+  const imageTextSectionRef = useRef(null);
+  const aboutUsSectionRef = useRef(null);
+  const animatedSectionRef = useRef(null);
+  const productsSectionRef = useRef(null);
+
+  const toggleHeaderTheme = () => {
+    const currentScroll = window.scrollY;
+
+    if (headerClass === 'dark') {
+      if ((currentScroll >= aboutUsSectionRef.current.offsetTop 
+        && currentScroll < aboutUsSectionRef.current.offsetTop + aboutUsSectionRef.current.offsetHeight)
+        || (currentScroll >= productsSectionRef.current.offsetTop 
+          & currentScroll < productsSectionRef.current.offsetTop + productsSectionRef.current.offsetHeight)) {
+          setHeaderClass('light')
+      }
+    }
+
+    if (headerClass === 'light') {
+      if ((currentScroll >= imageTextSectionRef.current.offsetTop 
+        && currentScroll < imageTextSectionRef.current.offsetTop + imageTextSectionRef.current.offsetHeight)
+        || (currentScroll >= animatedSectionRef.current.offsetTop 
+          & currentScroll < animatedSectionRef.current.offsetTop + animatedSectionRef.current.offsetHeight)
+        ) {
+          setHeaderClass('dark')
+      }
+    }
+  }
 
   useEffect(() => {
-    // Scroll to top when the page is loaded or reloaded
-    window.scrollTo(0, 0);
-
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0, // Trigger when the top of the section reaches the top of the viewport
-    };
-
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target === imageTextRef.current) {
-            setHeaderClass('dark'); // Set to 'light' when ImageTextSection is at the top
-          } else if (entry.target === animatedRef.current) {
-            setHeaderClass('light'); // Set to 'dark' when AnimatedSection is at the top
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, options);
-
-    if (imageTextRef.current) observer.observe(imageTextRef.current);
-    if (animatedRef.current) observer.observe(animatedRef.current);
+    window.addEventListener("scroll", toggleHeaderTheme);
+    window.addEventListener("wheel", toggleHeaderTheme);
 
     return () => {
-      if (imageTextRef.current) observer.unobserve(imageTextRef.current);
-      if (animatedRef.current) observer.unobserve(animatedRef.current);
+      window.removeEventListener("scroll", toggleHeaderTheme);
+      window.removeEventListener("wheel", toggleHeaderTheme);
     };
+  }, [toggleHeaderTheme]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -54,14 +60,18 @@ const HomePage = () => {
         className={headerClass}
         openContactForm={() => setContactFormIsVisible(true)}
       />
-      <div ref={imageTextRef}>
+      <div ref={imageTextSectionRef}>
         <ImageTextSection />
       </div>
-      <AboutUsSection />
-      <div ref={animatedRef}>
+      <div ref={aboutUsSectionRef}>
+        <AboutUsSection />
+      </div>
+      <div ref={animatedSectionRef}>
         <AnimatedSection />
       </div>
-      <ProductsSection />
+      <div ref={productsSectionRef}>
+        <ProductsSection />
+      </div>
       <Footer />
       <ContactForm
         isVisible={contactFormIsVisible}

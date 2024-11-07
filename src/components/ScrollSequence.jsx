@@ -6,6 +6,7 @@ const ScrollSequence = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   let   isAnimated = false;
   const [currentStage, setCurrentStage] = useState(0);
+  const [isTextVisible, setIsTextVisible] = useState(false);
   const currentFrameIndexRef = useRef(0);
   const canvasRef = useRef(null);
   const sectionRef = useRef(null);
@@ -52,7 +53,6 @@ const ScrollSequence = () => {
   };
 
   const scrollToPosition = (position) => {
-    console.log(position)
     window.scrollTo({
       top: position,
       behavior: 'smooth',
@@ -72,7 +72,7 @@ const ScrollSequence = () => {
       
     const startAnimation = () => {
       clearInterval(intervalRef.current);
-      console.log('started phase' + currentStage);
+      //console.log('started phase' + currentStage);
       const newStage = isScrollDown ? currentStage + 1 : currentStage - 1;
       const scrollPoints = getScrollPoints();
       scrollToPosition(scrollPoints[newStage]);
@@ -84,8 +84,9 @@ const ScrollSequence = () => {
           clearInterval(intervalRef.current);
           enableScroll();
           setIsAnimating(false);
+          setCurrentTextStage(isScrollDown ? Math.min(newStage, 2) : Math.max(newStage, 0));
+          setCurrentStage(newStage);
           isAnimated = false;
-          setCurrentStage(isScrollDown ? currentStage + 1 : currentStage - 1);
           console.log('stopped');
         }
         currentFrameIndexRef.current = newCurrentIndex;
@@ -140,6 +141,7 @@ const ScrollSequence = () => {
   }, []);
 
   const handleScroll = (e) => {
+    console.log(currentFrameIndexRef.current)
     if (isAnimating) return;
 
     const isScrollDown = e.deltaY > 0;
@@ -180,20 +182,22 @@ const ScrollSequence = () => {
 
     // Trigger animation only when scroll position is within the section
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
+      setIsTextVisible(true)
+
       if (currentStage === 0 && !isScrollDown) { // exit from animation section up
         return;
       }
   
-      if (
-        (currentStage === 0 && !isScrollDown) ||
-        (currentStage === totalStages - 1 && isScrollDown)
-        
-      ) {
+      if (currentStage === totalStages - 1 && isScrollDown) {
+        console.log('out of animation DOWN')
+        //scrollToPosition(sectionBottom)
         return;
       }
 
       animateSequence(isScrollDown);
       isAnimated = true;
+    } else {
+      setIsTextVisible(false)
     }
   };
 
@@ -225,6 +229,20 @@ const ScrollSequence = () => {
         height={window.innerHeight}
         className="png__sequence__canvas"
       ></canvas>
+      <div className={`png__sequence__text visible ${isTextVisible ? '' : ''}`}>
+        <div className={`png__sequence__text_part ${isTextVisible && currentFrameIndexRef.current <= 86 ? 'active' : 'hidden'}`}>
+          <p>{'1. Заїзд на підйомник:'}</p>
+          <p>{'Користувач заїжджає на платформу підйомника'}</p>
+        </div>
+        <div className={`png__sequence__text_part ${isTextVisible && currentFrameIndexRef.current > 86 && currentFrameIndexRef.current <= 181 ? 'active' : 'hidden'}`}>
+          <p>{'2. Підйом:'}</p>
+          <p>{'Користувач натискає кнопку, і підйомник плавно піднімається до потрібного рівня.'}</p>
+        </div>
+        <div className={`png__sequence__text_part ${isTextVisible && currentFrameIndexRef.current >= 182 ? 'active' : 'hidden'}`}>
+          <p>{'3. Виїзд з підйомника:'}</p>
+          <p>{'Брамка відкривається, дозволяючи користувачу безпечно виїхати.'}</p>
+        </div>
+      </div>
     </div>
   );
 };
