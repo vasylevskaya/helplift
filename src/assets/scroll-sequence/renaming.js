@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the folder containing the images
-const folderPath = './images'; // Modify this to your folder
+const folderPath = './images-low'; // Modify this to your folder
 const extName = '.webp'
 
 // Read the files in the directory

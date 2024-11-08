@@ -19,33 +19,29 @@
   object-fit: cover;
 }
 
-.png__sequence__text {
-  
-  transition: 100ms;
+
+/* .png__sequence__text.hidden {
   opacity: 0;
-  visibility: hidden;
 }
-
-.png__sequence__text.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
+ */
 .png__sequence__text_part {
   position: fixed;
-  top: 120px;
+  top: 150px;
   right: 50px;
   max-width: 300px;
   z-index: 40;
   transition: 300ms ease-in-out;
+  opacity: 0;
 }
 
-.png__sequence__text.visible .png__sequence__text_part.active {
+
+.png__sequence__text.visible .png__sequence__text_part.visible {
   animation: textAppear 700ms;
   animation-fill-mode: forwards;
 }
 
-.png__sequence__text_part.hidden {
+.png__sequence__text.hidden .png__sequence__text_part,
+.png__sequence__text .png__sequence__text_part.hidden {
   animation: textDisappear 700ms;
   animation-fill-mode: forwards;
 }
@@ -75,7 +71,7 @@
 @keyframes textDisappear {
   0% {
     transform: translateY(0);
-    opacity: 1;
+    /* opacity: 1; */
   }
   100% {
     transform: translateY(-50vh);
