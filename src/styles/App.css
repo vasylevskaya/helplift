@@ -6,8 +6,6 @@
 }
 
 .png__sequence__canvas {
-  /* max-height: calc(100vh - 100px);
-  top: 100px; */
   max-height: 100vh;
   top: 0;
   bottom: 0;
@@ -19,21 +17,22 @@
   object-fit: cover;
 }
 
-
-/* .png__sequence__text.hidden {
-  opacity: 0;
-}
- */
 .png__sequence__text_part {
   position: fixed;
   top: 150px;
-  right: 50px;
-  max-width: 300px;
+  right: 30px;
+  max-width: 350px;
   z-index: 40;
   transition: 300ms ease-in-out;
   opacity: 0;
 }
 
+
+@media (max-width: 1100px) {
+  .png__sequence__text_part  {
+    max-width: 300px
+  }
+}
 
 .png__sequence__text.visible .png__sequence__text_part.visible {
   animation: textAppear 700ms;
@@ -53,7 +52,7 @@
 }
 
 .png__sequence__text_part p:nth-of-type(2) {
-  font-size: 18px;
+  font-size: 20px;
   margin: 0;
 }
 

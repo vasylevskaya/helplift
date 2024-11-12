@@ -115,10 +115,32 @@ const ScrollSequence = () => {
       img.src = images[index];
       img.onload = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+  
+        // Calculate scaling to mimic 'object-fit: cover'
+        const canvasAspect = canvas.width / canvas.height;
+        const imgAspect = img.width / img.height;
+  
+        let sx, sy, sWidth, sHeight;
+  
+        if (imgAspect > canvasAspect) {
+          // Image is wider than the canvas
+          sWidth = img.height * canvasAspect;
+          sHeight = img.height;
+          sx = (img.width - sWidth) / 2;
+          sy = 0;
+        } else {
+          // Image is taller than the canvas
+          sWidth = img.width;
+          sHeight = img.width / canvasAspect;
+          sx = 0;
+          sy = (img.height - sHeight) / 2;
+        }
+  
+        context.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
       };
-    }
-  }, []);
+      }
+    }, []);
+  
 
   const handleScroll = (e) => {
     if (isAnimating) return;
