@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
@@ -18,17 +18,18 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      <HashRouter>
+      <Router>
         <Header />
         <Routes>
-          <Route path={ROUTES.home_page} element={<HomePage />} />
           <Route path={ROUTES.product_page} element={<ProductPage />} />
           <Route path={ROUTES.privacy_policy_page} element={<PrivacyPolicyPage />} />
+          <Route path={ROUTES.home_page} element={<HomePage />} />
+          <Route path={'*'} element={<HomePage />} />
         </Routes>
         <ContactForm />
         <CornerButtons />
         <Footer />
-      </HashRouter>
+      </Router>
     </RecoilRoot>
   );
 };
