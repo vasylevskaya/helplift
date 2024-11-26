@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { scrollSequenceImages as images } from '../assets/scroll-sequence/ScrollSequenceImagesImport';
+import { useRecoilState } from "recoil";
+import { animationTextVisibleState } from "../recoil/atoms";
+import ButtonCircle from "./ButtonCircle";
+import SkipAnimation from "./SkipAnimation";
 
 const ScrollSequence = () => {
   const intervalRef = useRef(null);
@@ -7,7 +11,7 @@ const ScrollSequence = () => {
   let   isAnimated = false;
   const [currentStage, setCurrentStage] = useState(0);
   const [textStage, setTextStage] = useState(0); // 0 - 2
-  const [isTextVisible, setIsTextVisible] = useState(false);
+  const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
   const currentFrameIndexRef = useRef(0);
   const canvasRef = useRef(null);
   const sectionRef = useRef(null);
@@ -82,9 +86,7 @@ const ScrollSequence = () => {
           setIsAnimating(false);
           setCurrentStage(newStage);
           isAnimated = false;
-          console.log('stopped');
         }
-        console.log(currentFrameIndexRef.current, newCurrentIndex)
         currentFrameIndexRef.current = newCurrentIndex;
 
         let newTextStage
@@ -155,28 +157,36 @@ const ScrollSequence = () => {
     // Trigger animation only when scroll position is within the section
     
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
-      if (!isTextVisible) setIsTextVisible(true)
+      if (!isAnimTextVisible) setIsAnimTextVisible(true)
 
       if (currentStage === 0 && !isScrollDown) { // exit from animation section up
         return;
       }
   
-      if (currentStage === totalStages - 1 && isScrollDown) {  // exit from animation section down
+      if (currentStage === totalStages - 1 && isScrollDown) { // exit from animation section down
         return;
       }
 
       animateSequence(isScrollDown);
       isAnimated = true;
     } else {
-      if (isTextVisible) setIsTextVisible(false)
+      if (isAnimTextVisible) setIsAnimTextVisible(false)
 
       if (currentScroll <= firstStageTopPoint && currentStage !== 0) {
-        setCurrentStage(0)
+        console.log('reseting to 0')
+        const newStage = 0
+        setCurrentStage(newStage)
         currentFrameIndexRef.current = frameIndexesRange[0]
+        const newCurrentIndex = frameIndexesRange[newStage]
+        updateImage(newCurrentIndex)
 
       } else if (currentScroll >= lastStageTopPoint && currentStage !== totalStages - 1) {
-        setCurrentStage(totalStages - 1)
+        console.log('reseting to last')
+        const newStage = totalStages - 1
+        setCurrentStage(newStage)
         currentFrameIndexRef.current = frameIndexesRange[totalStages - 1]
+        const newCurrentIndex = frameIndexesRange[newStage]
+        updateImage(newCurrentIndex);
       }
     }
   };
@@ -203,13 +213,14 @@ const ScrollSequence = () => {
 
   return (
     <div className="png__sequence" ref={sectionRef}>
+      <SkipAnimation />
       <canvas
         ref={canvasRef}
         width={window.innerWidth}
         height={window.innerHeight}
         className="png__sequence__canvas"
       ></canvas>
-      <div className={`png__sequence__text ${isTextVisible ? 'visible' : 'hidden'}`}>
+      <div className={`png__sequence__text ${isAnimTextVisible ? 'visible' : 'hidden'}`}>
         <div className={`png__sequence__text_part ${textStage === 0 ? 'visible' : 'hidden'}`}>
           <p>{'1. Заїзд на підйомник:'}</p>
           <p>{'Користувач заїжджає на платформу підйомника'}</p>

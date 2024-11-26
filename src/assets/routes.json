@@ -1,0 +1,5 @@
+{
+  "home_page": "/helplift/",
+  "product_page": "/helplift/products/:id",
+  "privacy_policy_page": "/helplift/privacy-policy"
+}

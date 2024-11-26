@@ -10,9 +10,6 @@ const ContactData = () => {
       <p>
         <i className="fab fa-instagram"></i> @helplift
       </p>
-      <p>
-        <i className="fas fa-map-marker-alt"></i> вул. Широка 56
-      </p>
     </div>
   )
 }

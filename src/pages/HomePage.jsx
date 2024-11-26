@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import '../styles/HomePage.css';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import AboutUsSection from '../components/AboutUsSection';
 import AnimatedSection from '../components/AnimatedSection';
 import ProductsSection from '../components/ProductsSection';
-import ContactForm from '../components/ContactForm';
 import ImageTextSection from '../components/ImageTextSection';
-import CornerButtons from '../components/CornerButtons';
+import { headerThemeState } from '../recoil/atoms';
 
 const HomePage = () => {
-  const [contactFormIsVisible, setContactFormIsVisible] = useState(false);
-  const [headerClass, setHeaderClass] = useState('dark'); // Start with 'dark'
+  const location = useLocation();
+  const [headerTheme, setHeaderTheme] = useRecoilState(headerThemeState);
   const imageTextSectionRef = useRef(null);
   const aboutUsSectionRef = useRef(null);
   const animatedSectionRef = useRef(null);
@@ -20,22 +19,22 @@ const HomePage = () => {
   const toggleHeaderTheme = () => {
     const currentScroll = window.scrollY;
 
-    if (headerClass === 'dark') {
+    if (headerTheme === 'dark') {
       if ((currentScroll >= aboutUsSectionRef.current.offsetTop 
         && currentScroll < aboutUsSectionRef.current.offsetTop + aboutUsSectionRef.current.offsetHeight)
         || (currentScroll >= productsSectionRef.current.offsetTop 
           & currentScroll < productsSectionRef.current.offsetTop + productsSectionRef.current.offsetHeight)) {
-          setHeaderClass('light')
+            setHeaderTheme('light')
       }
     }
 
-    if (headerClass === 'light') {
+    if (headerTheme === 'light') {
       if ((currentScroll >= imageTextSectionRef.current.offsetTop 
         && currentScroll < imageTextSectionRef.current.offsetTop + imageTextSectionRef.current.offsetHeight)
         || (currentScroll >= animatedSectionRef.current.offsetTop 
           & currentScroll < animatedSectionRef.current.offsetTop + animatedSectionRef.current.offsetHeight)
         ) {
-          setHeaderClass('dark')
+          setHeaderTheme('dark')
       }
     }
   }
@@ -50,16 +49,27 @@ const HomePage = () => {
     };
   }, [toggleHeaderTheme]);
 
+  /* Scrolls to the target section after navigating from another page */
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (location.hash) {
+      const elementId = location.hash.substring(1);
+      const scrollToElement = () => {
+        const element = document.getElementById(elementId);
+        if (element) {
+          window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+        }
+      };
+  
+      // Delay to ensure DOM rendering is complete
+      const timeoutId = setTimeout(scrollToElement, 50);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [location]);
+
+  useEffect(() => setHeaderTheme('dark'), [])
 
   return (
     <div className='home-page'>
-      <Header
-        className={headerClass}
-        openContactForm={() => setContactFormIsVisible(true)}
-      />
       <div ref={imageTextSectionRef}>
         <ImageTextSection />
       </div>
@@ -72,12 +82,6 @@ const HomePage = () => {
       <div ref={productsSectionRef}>
         <ProductsSection />
       </div>
-      <Footer />
-      <ContactForm
-        isVisible={contactFormIsVisible}
-        closeForm={() => setContactFormIsVisible(false)}
-      />
-      <CornerButtons />
     </div>
   );
 };

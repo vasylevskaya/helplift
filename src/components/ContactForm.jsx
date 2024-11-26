@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import t from '../assets/text-content.json';
+import { useSearchParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { contactFormVisibleState } from '../recoil/atoms';
 import ButtonCircle from '../components/ButtonCircle';
 import ButtonGradient from './ButtonGradient';
 import ContactData from './ContactData';
 
-const ContactForm = ({
-  isVisible,
-  closeForm
-}) => {
+const ContactForm = () => {
+  const [searchParams] = useSearchParams();
+  const contactFormIsVisibleByDefault = searchParams.get('contactForm') === 'true';
+  const [contactFormIsVisible, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
+
+  useEffect(() => {
+    // keep contactFormIsVisibleByDefault in useEffect, and not as a default value
+    // of state to have opening animation when the page loads
+    if (contactFormIsVisibleByDefault) {
+      setContactFormIsVisible(true);
+    }
+
+    return () => {
+      setContactFormIsVisible(false);
+    }
+  }, []);
+
   return (
-    <div className={`contact-form ${isVisible ? 'visible' : 'hidden'}`}>
+    <div className={`contact-form ${contactFormIsVisible ? 'visible' : 'hidden'}`}>
       <div className='contact-form_blur'>
 
       </div>
@@ -45,14 +61,16 @@ const ContactForm = ({
           </label>
           <ContactData />
           <button className='submit-btn'>
-            <p className='submit-btn-text'>{"Надіслати"}</p>
-            <ButtonCircle arrowColor={'#fff'} />
+            <p className='submit-btn-text btn-circle-sibling'>
+              {"Надіслати"}
+            </p>
+            <ButtonCircle />
           </button>
         </form>
       </div>
       <button
         className='contact-form_close-btn'
-        onClick={closeForm}
+        onClick={() => setContactFormIsVisible(false)}
       >
         <ButtonGradient>
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">

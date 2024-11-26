@@ -1,16 +1,19 @@
-import { useState } from "react";
-
 const ButtonCircle = ({
-  className = 'black',
-  arrowColor = '#151517',
+  backgroundColor = '#151517',
+  arrowColor = '#ffffff',
   arrowColorHover,
+  backgroundColorHover,
   isHovered,
   isLong
 }) => {
+  
   return (
     <div
-      className={`button-circle ${className}`}
-      style={{ backgroundColor: className }}
+      className={`btn-circle`}
+      style={{ backgroundColor: isHovered && backgroundColorHover
+        ? backgroundColorHover
+        : backgroundColor
+      }}
     >
       {isLong
         ? <svg width="36" height="4" viewBox="0 0 36 4" fill="none" xmlns="http://www.w3.org/2000/svg">

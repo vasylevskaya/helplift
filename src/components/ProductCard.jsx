@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import ButtonCircle from './ButtonCircle';
+import ROUTES from '../assets/routes.json';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({
+  product,
+  isProductPage /* optional */
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [circlePosition, setCirclePosition] = useState({ x: 0, y: 0 });
+
+  const image = isProductPage /* add extra . to access assets correctly */
+    ? `.${product.images[0]}`
+    : product.images[0]
 
   const handleMouseMove = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
@@ -11,28 +19,29 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <a href={product.link}>
+    <a
+      className='product-card-link'
+      href={ROUTES.product_page.replace(':id', product.id)}
+    >
       <div
         key={product.id}
-        className={`product-card ${isHovered ? 'hovered' : ''}`}
+        className={`product-card ${isHovered ? 'hovered' : ''} btn-circle-parent`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onMouseMove={handleMouseMove}
-        style={{ position: 'relative', overflow: 'hidden' }} // Keeps the circle inside the card
+        style={{ position: 'relative', overflow: 'hidden' }}
       >
-        <h4 className='product-card_title cormorant'>
-          {product.title}
-        </h4>
-        {product.image && (
+        <h4 className='product-card_title'>{product.name}</h4>
+        {image && (
           <img
             className='product-card_img'
-            src={product.image}
-            alt={product.title}
+            src={image}
+            alt={product.name}
           />
         )}
         <ButtonCircle
-          className='transparent'
-          arrowColor='#fff'
+          backgroundColor='transparent'
+          arrowColor='#ffffff'
           arrowColorHover='#151517'
           isHovered={isHovered}
           isLong={true}
@@ -44,7 +53,7 @@ const ProductCard = ({ product }) => {
               left: circlePosition.x,
               top: circlePosition.y,
             }}
-          ></div> // Circle that follows the cursor
+          ></div>
         )}
       </div>
     </a>

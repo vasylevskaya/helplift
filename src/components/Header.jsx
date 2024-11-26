@@ -1,38 +1,56 @@
 import React, { useState} from 'react';
-import { Button, Link } from 'react-scroll';
-import t from '../assets/text-content.json';
+import { useRecoilState } from 'recoil';
+import { contactFormVisibleState, headerThemeState, animationTextVisibleState } from '../recoil/atoms';
 import ButtonCircle from '../components/ButtonCircle';
 import logoWhite from '../assets/images/logo-white.png';
 import logoBlack from '../assets/images/logo-black.png';
 import hamburgerIcon from '../assets/images/hamburger.svg';
 import ButtonGradient from './ButtonGradient';
+import ROUTES from '../assets/routes.json';
 
-/* стилі для хедера в App.css */
-
-const Header = ({
-  openContactForm,
-  className
-}) => {
+const Header = () => {
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
+  const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
+  const [headerTheme, setHeaderTheme] = useRecoilState(headerThemeState);
+  const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
+
+  const handleClick = (elementId) => {
+    if (mobileMenuIsVisible) {
+      setMobileMenuIsVisible(false);
+    }
+  
+    if (elementId) {
+      if (window.location.pathname !== ROUTES.home_page) {
+        // Navigate to the homepage with a hash
+        window.location.href = `${ROUTES.home_page}#${elementId}`;
+      } else {
+        // Scroll to the element immediately
+        const element = document.getElementById(elementId);
+        if (element) {
+          window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+        }
+      }
+  
+      if (isAnimTextVisible) {
+        setIsAnimTextVisible(false);
+      }
+    }
+  };  
 
   return (
-    <header className={`header header--${className}`}>
-      <Link
-        to={'top'}
-        spy={true}
-        smooth={true}
-        offset={-70}
-        duration={300}
+    <header className={`header header--${headerTheme}`}>
+      <a
+        href={ROUTES.home_page}
       >
         <div className="logo-container">
           <img
-            key={className} // Key forces re-render to trigger transition
+            key={headerTheme} // Key forces re-render to trigger transition
             className='header_logo'
-            src={className === 'light' ? logoWhite : logoBlack}
+            src={headerTheme === 'light' ? logoWhite : logoBlack}
             alt='Logo'
           />
         </div>
-      </Link>
+      </a>
       <div className={`header_nav-wrap ${mobileMenuIsVisible ? 'visible' : 'hidden'}`}>
         <div className='header_nav-blur'></div>
         <nav className='header_nav'>
@@ -47,35 +65,35 @@ const Header = ({
               </svg>
             </ButtonGradient>
           </button>
-          <Link
+          <button
             className='header_nav_link'
-            activeClass="active"
-            to={'about-us-section'}
-            spy={true}
-            smooth={true}
-            duration={300}
+            onClick={() => handleClick('section-about-us')}
           >
             {'Про нас'}
             <div className='location-dot' />
-          </Link>
-          <Link
+          </button>
+          <button
             className='header_nav_link'
-            activeClass="active"
-            to={'products-section'}
-            spy={true}
-            smooth={true}
-            duration={300}
+            onClick={() => handleClick('section-products')}
           >
             {'Підйомники'}
             <div className='location-dot' />
-          </Link>
+          </button>
           <hr className='input-line' />
           <button
             className='header_contact'
-            onClick={openContactForm}
+            onClick={() => {
+              handleClick()
+              setContactFormIsVisible(true)
+            }}
           >
-            <p className='header_contact_text'>{"Зв'язатися"}</p>
-            <ButtonCircle className='white' />
+            <p className='header_contact_text btn-circle-sibling'>
+              {"Зв'язатися"}
+            </p>
+            <ButtonCircle
+              backgroundColor='#ffffff'
+              arrowColor='#151517'
+            />
           </button>
         </nav>
       </div>

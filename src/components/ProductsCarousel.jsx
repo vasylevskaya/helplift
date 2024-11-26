@@ -1,40 +1,20 @@
-import React, { useRef } from 'react';
-import img1 from '../assets/images/1.jpg';
-import img2 from '../assets/images/2.jpg';
-import img3 from '../assets/images/3.jpg';
-import img4 from '../assets/images/4.jpg';
+import React, { useRef, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import ButtonCircle from './ButtonCircle';
 import ProductCard from './ProductCard';
+import products from '../assets/products.json';
+import ROUTES from '../assets/routes.json';
 
-const products = [
-  {
-    id: 1,
-    title: 'Підйомник 1',
-    image: img1,
-    link: '/product/1',
-  },
-  {
-    id: 2,
-    title: 'Підйомник 2',
-    image: img2,
-    link: '/product/2',
-  },
-  {
-    id: 3,
-    title: 'Підйомник 3',
-    image: img3,
-    link: '/product/3',
-  },
-  {
-    id: 4,
-    title: 'Підйомник 4',
-    image: img4,
-    link: '/product/4',
-  },
-];
-
-const ProductCarousel = () => {
+const ProductCarousel = ({
+  /* optional, to exclude a product that is displayed on ProductPage from the carousel */
+  currentProductId,
+}) => {
   const carouselRef = useRef(null);
+
+  /* check if its product page */
+  const { pathname } = useLocation();
+  const { id } = useParams();
+  const isProductPage = pathname === ROUTES.product_page.replace(':id', id);
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -51,16 +31,22 @@ const ProductCarousel = () => {
   return (
     <div className="product-carousel-wrapper">
       <button className="carousel-button left" onClick={scrollLeft}>
-        <ButtonCircle arrowColor='#fff' />
+        <ButtonCircle />
       </button>
       <div className="product-carousel" ref={carouselRef}>
         <div className="product-card-placeholder"> </div>
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          /* excluding a product that is displayed on ProductPage from the carousel */
+          currentProductId !== `${product.id}` &&
+            <ProductCard
+              key={product.id}
+              product={product}
+              isProductPage={isProductPage}
+            />
         ))}
       </div>
       <button className="carousel-button right" onClick={scrollRight}>
-        <ButtonCircle arrowColor='#fff' />
+        <ButtonCircle />
       </button>
     </div>
   );
