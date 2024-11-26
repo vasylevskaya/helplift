@@ -23,7 +23,7 @@ const App = () => {
         <Routes>
           <Route path={ROUTES.product_page} element={<ProductPage />} />
           <Route path={ROUTES.privacy_policy_page} element={<PrivacyPolicyPage />} />
-          <Route path={ROUTES.homgit e_page} element={<HomePage />} />
+          <Route path={ROUTES.home_page} element={<HomePage />} />
           <Route path={'*'} element={<HomePage />} />
         </Routes>
         <ContactForm />
