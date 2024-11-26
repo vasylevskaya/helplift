@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/helplift/static/css/main.31788b38.css",
-    "main.js": "/helplift/static/js/main.b20ca488.js",
+    "main.js": "/helplift/static/js/main.a9ea9c10.js",
     "static/js/453.2a41f78e.chunk.js": "/helplift/static/js/453.2a41f78e.chunk.js",
     "static/media/scene.png": "/helplift/static/media/scene.55177b91ac8f044b7bcd.png",
     "static/media/scene-tablet-vertical.png": "/helplift/static/media/scene-tablet-vertical.f83ce0ec2b61508533a1.png",
@@ -254,11 +254,11 @@
     "index.html": "/helplift/index.html",
     "static/media/original-arrow-up.svg": "/helplift/static/media/original-arrow-up.8d6ca1aabc460b60448a.svg",
     "main.31788b38.css.map": "/helplift/static/css/main.31788b38.css.map",
-    "main.b20ca488.js.map": "/helplift/static/js/main.b20ca488.js.map",
+    "main.a9ea9c10.js.map": "/helplift/static/js/main.a9ea9c10.js.map",
     "453.2a41f78e.chunk.js.map": "/helplift/static/js/453.2a41f78e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31788b38.css",
-    "static/js/main.b20ca488.js"
+    "static/js/main.a9ea9c10.js"
   ]
 }
