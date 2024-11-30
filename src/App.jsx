@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <RecoilRoot>
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <Routes>
           <Route path={ROUTES.product_page} element={<ProductPage />} />
@@ -29,7 +29,7 @@ const App = () => {
         <ContactForm />
         <CornerButtons />
         <Footer />
-      </BrowserRouter>
+      </HashRouter>
     </RecoilRoot>
   );
 };
