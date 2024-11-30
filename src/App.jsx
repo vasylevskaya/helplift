@@ -21,8 +21,8 @@ const App = () => {
       <HashRouter>
         <Header />
         <Routes>
-          <Route path={ROUTES.product_page} element={<ProductPage />} />
-          <Route path={ROUTES.privacy_policy_page} element={<PrivacyPolicyPage />} />
+          <Route exact path={ROUTES.product_page} element={<ProductPage />} />
+          <Route exact path={ROUTES.privacy_policy_page} element={<PrivacyPolicyPage />} />
           <Route path={ROUTES.home_page} element={<HomePage />} />
           <Route path={'*'} element={<HomePage />} />
         </Routes>

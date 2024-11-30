@@ -2,6 +2,7 @@ import React from 'react';
 import logoImg from '../assets/images/logo-black.png';
 import ContactData from './ContactData';
 import ROUTES from '../assets/routes.json';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -11,7 +12,7 @@ const Footer = () => {
         src={logoImg}
         alt='Logo'
       />
-      <a href={ROUTES.privacy_policy_page}>Політика Конфіденційності</a>
+      <Link to={ROUTES.privacy_policy_page}>Політика Конфіденційності</Link>
       <ContactData />
     </footer>
   );

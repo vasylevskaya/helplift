@@ -6,7 +6,10 @@ import '../styles/PrivacyPolicyPage.css';
 const PrivacyPolicyPage = () => {
   const [, setHeaderTheme] = useRecoilState(headerThemeState);
 
-  useEffect(() => setHeaderTheme('light'), []);
+  useEffect(() => {
+    setHeaderTheme('light');
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className='privacy-policy-page'>

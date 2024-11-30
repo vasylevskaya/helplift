@@ -7,6 +7,7 @@ import logoBlack from '../assets/images/logo-black.png';
 import hamburgerIcon from '../assets/images/hamburger.svg';
 import ButtonGradient from './ButtonGradient';
 import ROUTES from '../assets/routes.json';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
@@ -39,8 +40,8 @@ const Header = () => {
 
   return (
     <header className={`header header--${headerTheme}`}>
-      <a
-        href={ROUTES.home_page}
+      <Link
+        to={ROUTES.home_page}
       >
         <div className="logo-container">
           <img
@@ -50,7 +51,7 @@ const Header = () => {
             alt='Logo'
           />
         </div>
-      </a>
+      </Link>
       <div className={`header_nav-wrap ${mobileMenuIsVisible ? 'visible' : 'hidden'}`}>
         <div className='header_nav-blur'></div>
         <nav className='header_nav'>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ButtonCircle from './ButtonCircle';
 import ROUTES from '../assets/routes.json';
+import { Link } from 'react-router-dom';
+
 
 const ProductCard = ({
   product,
@@ -19,9 +21,9 @@ const ProductCard = ({
   };
 
   return (
-    <a
+    <Link
       className='product-card-link'
-      href={ROUTES.product_page.replace(':id', product.id)}
+      to={ROUTES.product_page.replace(':id', product.id)}
     >
       <div
         key={product.id}
@@ -56,7 +58,7 @@ const ProductCard = ({
           ></div>
         )}
       </div>
-    </a>
+    </Link>
   );
 };
 
