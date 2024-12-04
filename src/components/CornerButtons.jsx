@@ -5,11 +5,21 @@ import IconBigArrow from './IconBigArrow';
 const CornerButtons = ({ className }) => {
   const [areButtonsVisible, setAreButtonsVisible] = useState(false);
 
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const tgLink = 'tg://resolve?domain=+380507857996';
+  const fallbackTgLink = 'https://t.me/+380507857996';
 
-  const telegramLink = isMobile
-    ? 'tg://resolve?domain=+380507857996'
-    : 'https://t.me/+380507857996';
+  const handleTgClick = () => {
+    // Try to open the app (on mobile or desktop)
+    const link = document.createElement('a');
+    link.href = tgLink;
+    document.body.appendChild(link);
+    link.click();
+  
+    // If the app doesn't open, fallback to the web chat link after a delay
+    setTimeout(() => {
+      window.location.href = fallbackTgLink;
+    }, 1000);
+  };
 
   const toggleButtons = () => {
     let offset = 50;
@@ -35,8 +45,8 @@ const CornerButtons = ({ className }) => {
           className='corner-btns_btn corner-btns_btn--viber'
           title='Viber'
         />
-        <a
-          href={telegramLink}
+        <button
+          onClick={handleTgClick}
           className='corner-btns_btn corner-btns_btn--telegram'
           title='Telegram'
         />
