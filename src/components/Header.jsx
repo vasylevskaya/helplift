@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { contactFormVisibleState, headerThemeState, animationTextVisibleState } from '../recoil/atoms';
 import ButtonCircle from '../components/ButtonCircle';
@@ -10,6 +11,7 @@ import ROUTES from '../assets/routes.json';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+  const { pathname } = useLocation();
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
   const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
   const [headerTheme, setHeaderTheme] = useRecoilState(headerThemeState);
@@ -19,11 +21,13 @@ const Header = () => {
     if (mobileMenuIsVisible) {
       setMobileMenuIsVisible(false);
     }
+
+    console.log(pathname, ROUTES.home_page)
   
     if (elementId) {
-      if (window.location.pathname !== ROUTES.home_page) {
+      if (pathname !== ROUTES.home_page) {
         // Navigate to the homepage with a hash
-        window.location.href = `${ROUTES.home_page}#${elementId}`;
+        window.location.href = `${ROUTES.home_page}#/#${elementId}`;
       } else {
         // Scroll to the element immediately
         const element = document.getElementById(elementId);
@@ -42,13 +46,14 @@ const Header = () => {
     <header className={`header header--${headerTheme}`}>
       <Link
         to={ROUTES.home_page}
+        title='На головну'
       >
         <div className="logo-container">
           <img
             key={headerTheme} // Key forces re-render to trigger transition
             className='header_logo'
             src={headerTheme === 'light' ? logoWhite : logoBlack}
-            alt='Logo'
+            alt='Лого'
           />
         </div>
       </Link>

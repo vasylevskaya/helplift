@@ -30,6 +30,7 @@ const CornerButtons = ({ className }) => {
           title='Viber'
         />
         <a
+          href='https://t.me/+380507857996'
           className='corner-btns_btn corner-btns_btn--telegram'
           title='Telegram'
         />
