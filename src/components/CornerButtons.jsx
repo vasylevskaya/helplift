@@ -5,6 +5,12 @@ import IconBigArrow from './IconBigArrow';
 const CornerButtons = ({ className }) => {
   const [areButtonsVisible, setAreButtonsVisible] = useState(false);
 
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  const telegramLink = isMobile
+    ? 'tg://resolve?domain=+380507857996'
+    : 'https://t.me/+380507857996';
+
   const toggleButtons = () => {
     let offset = 50;
     let section = document.querySelector(".corner-btns");
@@ -30,7 +36,7 @@ const CornerButtons = ({ className }) => {
           title='Viber'
         />
         <a
-          href='https://t.me/+380507857996'
+          href={telegramLink}
           className='corner-btns_btn corner-btns_btn--telegram'
           title='Telegram'
         />
