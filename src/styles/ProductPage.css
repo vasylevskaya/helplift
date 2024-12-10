@@ -42,6 +42,8 @@
   .section-main {
     display: flex;
     flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -56,6 +58,8 @@
   .section-secondary {
     display: flex;
     flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -349,7 +353,7 @@
 
 @media (max-width: 500px) {
   .product-page .tabs {
-    padding: 30px;
+    padding: 30px 20px;
   }
 }
 
@@ -403,7 +407,7 @@
 
 @media (max-width: 500px) {
   .product-page .shipping-info {
-    padding: 30px;
+    padding: 30px 20px;
   }
 }
 
@@ -449,18 +453,18 @@
 
 .product-page .product-carousel-wrapper {
   margin-bottom: 100px;
-  padding-left: 85px;
+  /* padding-left: 85px; */
 }
 
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .product-page .product-carousel-wrapper {
     padding-left: 45px;
   }
-}
+} */
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
   .product-page .product-carousel-wrapper {
-    padding-left: 30px;
+    margin-bottom: 50px;
   }
 }
 
@@ -470,6 +474,12 @@
   padding: 0;
   border: none;
   z-index: 10;
+}
+
+@media (max-width: 700px) {
+  .product-page .product-carousel-wrapper .carousel-button {
+    display: none;
+  }
 }
 
 .product-page .product-carousel-wrapper .carousel-button.right {
@@ -492,7 +502,7 @@
 }
 
 .product-page .product-card-placeholder {
-  display: none;
+  width: 30px;
 }
 
 .product-page .product-carousel-title {

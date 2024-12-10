@@ -1,72 +1,92 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import * as yup from "yup";
+import emailjs from '@emailjs/browser';
 import t from '../assets/text-content.json';
-import { useSearchParams } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRecoilState } from 'recoil';
 import { contactFormVisibleState } from '../recoil/atoms';
 import ButtonCircle from '../components/ButtonCircle';
 import ButtonGradient from './ButtonGradient';
 import ContactData from './ContactData';
+import contactFormData from '../assets/сontact-form.json';
 
 const ContactForm = () => {
-  const [searchParams] = useSearchParams();
-  const contactFormIsVisibleByDefault = searchParams.get('contactForm') === 'true';
   const [contactFormIsVisible, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
-
-  useEffect(() => {
-    // keep contactFormIsVisibleByDefault in useEffect, and not as a default value
-    // of state to have opening animation when the page loads
-    if (contactFormIsVisibleByDefault) {
-      setContactFormIsVisible(true);
-    }
-
-    return () => {
-      setContactFormIsVisible(false);
-    }
-  }, []);
+  const {
+    REACT_APP_SERVICE_ID,
+    REACT_APP_TEMPLATE_ID,
+    REACT_APP_PUBLIC_KEY
+  } = process.env;
+  const errorMsg = t["contact-form"]["error-required"];
+  const successMsg = t["contact-form"]["success"];
+  const failureMsg = t["contact-form"]["failure"];
 
   return (
     <div className={`contact-form ${contactFormIsVisible ? 'visible' : 'hidden'}`}>
-      <div className='contact-form_blur'>
-
-      </div>
+      <div className='contact-form_blur'> </div>
       <div className='contact-form_content'>
         <h2 className='contact-form_content_title'>
-          {t['contact-form']['heading']}
+          Контактна форма
         </h2>
-        <form className='contact-form_content_form'>
-          <label className='label'>
-            <p className='label-text'>{"Ім'я*"}</p>
-            <input className='input' />
-            <hr className='input-line' />
-          </label>
-          <label className='label'>
-            <p className='label-text'>{"Прізвище*"}</p>
-            <input className='input' />
-            <hr className='input-line' />
-          </label>
-          <label className='label'>
-            <p className='label-text'>{"Номер телефону*"}</p>
-            <input className='input' />
-            <hr className='input-line' />
-          </label>
-          <label className='label'>
-            <p className='label-text'>{"Місто*"}</p>
-            <input className='input' />
-            <hr className='input-line' />
-          </label>
-          <label className='label label-comment'>
-            <p className='label-text'>{"Коментар"}</p>
-            <input className='input input-comment' />
-            <hr className='input-line' />
-          </label>
-          <ContactData />
-          <button className='submit-btn'>
-            <p className='submit-btn-text btn-circle-sibling'>
-              {"Надіслати"}
-            </p>
-            <ButtonCircle />
-          </button>
-        </form>
+        <Formik
+          initialValues={contactFormData.initialValues}
+          validationSchema={yup.object({
+            name: yup.string().required(errorMsg),
+            surname: yup.string().required(errorMsg),
+            phone: yup.string().required(errorMsg),
+            town: yup.string().required(errorMsg),
+            comment: yup.string()
+          })}
+          onSubmit={async (values, formikContext) => {
+            emailjs.sendForm(
+              REACT_APP_SERVICE_ID,
+              REACT_APP_TEMPLATE_ID,
+              "#contact-form",
+              REACT_APP_PUBLIC_KEY
+            )
+              .then(
+                () => {
+                  // Reset the form after successful submission
+                  formikContext.resetForm();
+                  alert(successMsg); // Custom success message
+                },
+                (error) => {
+                  alert(failureMsg); // Custom failure message
+                }
+              );
+            formikContext.setSubmitting(false);
+          }}
+        >
+          {(formikContext) => (
+            <Form className="contact-form_content_form" id="contact-form">
+              {contactFormData.inputs.map((input) => (
+                <label className={`label ${input.class ?? ''}`} key={input.name}>
+                  <p className='label-text'>{input.placeholder}</p>
+                  <Field
+                    type="text"
+                    name={input.name}
+                    className="input"
+                  />
+                  <hr className='input-line' />
+                  <p className='error-msg'>
+                    <ErrorMessage name={input.name} />
+                  </p>
+                </label>
+              ))}
+              <ContactData />
+              <button
+                type="submit"
+                className='submit-btn'
+                disabled={formikContext.isSubmitting}
+              >
+                <p className='submit-btn-text btn-circle-sibling'>
+                  Надіслати
+                </p>
+                <ButtonCircle />
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
       <button
         className='contact-form_close-btn'

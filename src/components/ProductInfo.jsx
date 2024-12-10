@@ -19,14 +19,18 @@ const ProductInfo = ({
         <p className='product-price'>{productPrice}</p>
         {productToOrder && (
           <div className='product-to-order'>
-            <img src={checkIcon} className='check-icon' />
-            <p>{'Під замовлення'}</p>
+            <img
+              src={checkIcon}
+              className='check-icon'
+              alt='check-icon'
+            />
+            <p>Під замовлення</p>
           </div>
         )}
       </div>
       <hr className='input-line input-line--top' />
       <p className='characteristics-title'>
-        {'Характеристики'}
+        Характеристики
       </p>
       <div className='characteristics'>
         {t.characteristics.map((characteristic) => (
@@ -46,7 +50,7 @@ const ProductInfo = ({
         onClick={() => setContactFormIsVisible(true)}
       >
         <p className='btn-order btn-circle-sibling'>
-          {'Замовити'}
+          Замовити
         </p>
         <ButtonCircle />
       </button>

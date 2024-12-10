@@ -2,18 +2,24 @@ Documentation
 
 Packages:
 - Recoil (state management)
+- FontAwesome (icons)
 
-Files:
-1. Assets
-/images - background images, icons etc.
-/products - data and images for products. More info in the PRODUCTS section
-/scroll-sequence
+Assets:
+- /images (general images and icons);
+- /products (separate folder for each product)
+- /scroll-sequence:
+/images-low (images for animation)
+renaming.js (run to automatically rename all images)
+ScrollSequenceImagesImport.js - imports all images for animation
+- product.json - products info
+- routes.json - routes info
+- text-content.json - for bigger texts; can be used for localisation in future
+- contact-form - JSON for rendering contact form
 
 Animated Section (scroll sequence):
+1. Changing images:
+- Images are stored in assets/scroll-sequence/images.
+- You can run renaming.js file to format images' names automatically.
+- Adjust length in ScrollSequenceImagesImport (should be equal to images quantity).
+- Adjust start points of the stages in ScrolSequence.jsx (frameIndexesRange)
 
-PRODUCTS:
-1. Data stored at /src/assets/products/products.json
-2. Images are stored in separate folder for each product, named by product ID. All the
-images stored in the folder will be displayed on ProductPage carousel, in th same order.
-The first image in the folder will be shown in Product Card (HomePage, ProductsCarousel).
-3.

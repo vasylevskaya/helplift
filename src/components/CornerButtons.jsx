@@ -10,10 +10,7 @@ const CornerButtons = ({ className }) => {
 
   const handleTgClick = () => {
     // Try to open the app (on mobile or desktop)
-    const link = document.createElement('a');
-    link.href = tgLink;
-    document.body.appendChild(link);
-    link.click();
+    window.location.href = tgLink;
   
     // If the app doesn't open, fallback to the web chat link after a delay
     setTimeout(() => {

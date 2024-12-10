@@ -1,0 +1,35 @@
+{
+  "initialValues": {
+    "name": "",
+    "surname": "",
+    "phone": "",
+    "town": "",
+    "comment": ""
+  },
+  "inputs": [
+    {
+      "name": "name",
+      "type": "text",
+      "placeholder": "Ім'я*"
+    },
+    {
+      "name": "surname",
+      "type": "text",
+      "placeholder": "Прізвище"
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "placeholder": "Номер телефону*"
+    },
+    { 
+      "name": "town",
+      "placeholder": "Місто*"
+    },
+    {
+      "name": "comment",
+      "placeholder": "Коментар",
+      "class": "label-comment"
+    }
+  ]
+}

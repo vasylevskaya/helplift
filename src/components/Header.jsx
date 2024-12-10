@@ -21,8 +21,6 @@ const Header = () => {
     if (mobileMenuIsVisible) {
       setMobileMenuIsVisible(false);
     }
-
-    console.log(pathname, ROUTES.home_page)
   
     if (elementId) {
       if (pathname !== ROUTES.home_page) {
@@ -85,7 +83,7 @@ const Header = () => {
             {'Підйомники'}
             <div className='location-dot' />
           </button>
-          <hr className='input-line' />
+          <hr id="nav-input-line" className='input-line' />
           <button
             className='header_contact'
             onClick={() => {
@@ -108,7 +106,11 @@ const Header = () => {
         className='header_nav-toggle button-gradient'
       >
         <ButtonGradient>
-          <img className='header_nav-toggle_icon' src={hamburgerIcon} />
+          <img
+            className='header_nav-toggle_icon'
+            src={hamburgerIcon}
+            alt='menu-icon'
+          />
         </ButtonGradient>
       </button>
     </header>

@@ -36,7 +36,7 @@
 @media (max-width: 641px) {
   .section-about-us_content {
     width: 100%;
-    padding: 40px;
+    padding: 60px 20px;
   }
 }
 
@@ -125,7 +125,7 @@
 
 @media (max-width: 1100px) and (orientation: portrait) {
   .section-image-text_content {
-    width: 100vw;
+    width: 100%;
     min-height: unset;
     justify-content: flex-start;
     background: linear-gradient(to bottom, #ffffffc4 0%, #ffffffb8 50%, #ffffff57 75%, transparent 100%);
@@ -134,7 +134,7 @@
 
 @media (max-width: 700px), (max-height: 700px) {
   .section-image-text_content {
-    padding: 120px 30px 150px;
+    padding: 120px 20px 150px;
   }
 }
 
