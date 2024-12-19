@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import ButtonCircle from './ButtonCircle';
+import imgPlaceholder from '../assets/images/img-placeholder.webp';
 
 const ProductImagesCarousel = ({ productImages, productId }) => {
   const carouselRef = useRef(null);
@@ -51,28 +52,29 @@ const ProductImagesCarousel = ({ productImages, productId }) => {
       <div className="carousel-container">
         <div className="carousel-wrapper">
           <div className="carousel" ref={carouselRef}>
-            {productImages.map((image, index) => (
-              <button
-                key={`${image}-${index}`}
-                className={`carousel-image ${activeImageIndex === index ? 'active' : ''}`}
-                onClick={() => setActiveImageIndex(index)}
-              >
-                <img
-                  src={'.' + image}
-                  alt={`Product ${productId} - ${index}`}
-                />
-              </button>
-            ))}
+            {productImages?.length > 1 &&
+              productImages.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  className={`carousel-image ${activeImageIndex === index ? 'active' : ''}`}
+                  onClick={() => setActiveImageIndex(index)}
+                >
+                  <img
+                    src={'.' + image}
+                    alt={`Product ${productId} - ${index}`}
+                  />
+                </button>
+              ))
+            }
+            
           </div>
         </div>
       </div>
-      {productImages.length > 0 && (
-        <img
-          className="active-image"
-          src={'.' + productImages[activeImageIndex]}
-          alt={`Active ${productId}`}
-        />
-      )}
+      <img
+        className="active-image"
+        src={productImages.length > 0 ? '.' + productImages[activeImageIndex] : imgPlaceholder}
+        alt={productImages.length > 0 ? `Active ${productId}` : 'Image placeholder'}
+      />
     </div>
   );
 };

@@ -411,7 +411,7 @@
 
 .footer {
   background-color: white;
-  padding: 60px 50px 10px;
+  padding: 40px 50px 10px;
 }
 
 @media (max-width: 900px) {
@@ -425,7 +425,6 @@
   .footer {
     padding-left: 20px;
     padding-right: 60px;
-    padding-top: 50px;
   }
 }
 
@@ -463,6 +462,10 @@
     width: 100%;
     text-align: left;
   } 
+}
+
+.footer_contacts_item .footer_contacts_item_phone {
+  font-size: 16px;
 }
 
 .footer_contacts_item img {
@@ -565,7 +568,7 @@
 }
 
 .footer .input-line {
-  margin-top: 30px;
+  margin-top: 40px;
   position: relative;
 }
 

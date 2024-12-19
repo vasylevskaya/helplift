@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import ButtonCircle from './ButtonCircle';
 import ProductCard from './ProductCard';
-import products from '../assets/products.json';
+import products from '../assets/products.json'; /* !! get images from public folder !! */
 import ROUTES from '../assets/routes.json';
 
 const ProductCarousel = ({

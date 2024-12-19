@@ -2,8 +2,7 @@
 @import url(./styles/App.css);
 
 /* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 /* Variables */
 :root {
   --dark-grey: #232325;
@@ -62,4 +61,12 @@ code {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.font-grotesque {
+  font-family: "Darker Grotesque", serif;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.3px;
+  font-size: 1.1em;
 }

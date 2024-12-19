@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ButtonCircle from './ButtonCircle';
 import ROUTES from '../assets/routes.json';
 import { Link } from 'react-router-dom';
-
+import imgPlaceholder from '../assets/images/img-placeholder.webp';
 
 const ProductCard = ({
   product,
@@ -11,9 +11,11 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const [circlePosition, setCirclePosition] = useState({ x: 0, y: 0 });
 
-  const image = isProductPage /* add extra . to access assets correctly */
-    ? `.${product.images[0]}`
-    : product.images[0]
+  let image = product.images[0];
+
+  if (product.images[0] && isProductPage) {
+    image = `.${product.images[0]}` /* add extra . to access assets correctly */
+  }
 
   const handleMouseMove = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
@@ -24,6 +26,7 @@ const ProductCard = ({
     <Link
       className='product-card-link'
       to={ROUTES.product_page.replace(':id', product.id)}
+      onClick={() =>  window.scrollTo(0, 0)}
     >
       <div
         key={product.id}
@@ -34,13 +37,11 @@ const ProductCard = ({
         style={{ position: 'relative', overflow: 'hidden' }}
       >
         <h4 className='product-card_title'>{product.name}</h4>
-        {image && (
-          <img
-            className='product-card_img'
-            src={image}
-            alt={product.name}
-          />
-        )}
+        <img
+          className='product-card_img'
+          src={image ?? imgPlaceholder}
+          alt={product.name}
+        />
         <ButtonCircle
           backgroundColor='transparent'
           arrowColor='#ffffff'

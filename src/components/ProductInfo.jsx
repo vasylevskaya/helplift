@@ -4,6 +4,7 @@ import ButtonCircle from '../components/ButtonCircle';
 import { contactFormVisibleState } from '../recoil/atoms';
 import checkIcon from '../assets/images/check.svg';
 import t from '../assets/text-content.json';
+import ProductInfoCharacteristics from './ProductInfoCharacteristics';
 
 const ProductInfo = ({
   productName,
@@ -16,7 +17,9 @@ const ProductInfo = ({
     <div className='product-info'>
       <h2 className='product-name'>{productName}</h2>
       <div className='product-price-wrapper'>
-        <p className='product-price'>{productPrice}</p>
+        <p className='product-price'>
+          від <span className='font-grotesque'>45 000</span> ₴
+        </p>
         {productToOrder && (
           <div className='product-to-order'>
             <img
@@ -29,21 +32,7 @@ const ProductInfo = ({
         )}
       </div>
       <hr className='input-line input-line--top' />
-      <p className='characteristics-title'>
-        Характеристики
-      </p>
-      <div className='characteristics'>
-        {t.characteristics.map((characteristic) => (
-          <div className='characteristics_row' key={characteristic[0]}>
-            <p className='characteristic-title'>
-              {characteristic[0]}
-            </p>
-            <p className='characteristic-text'>
-              {characteristic[1]}
-            </p>
-          </div>
-        ))}
-      </div>
+      <ProductInfoCharacteristics />
       <hr className='input-line input-line--bottom' />
       <button
         className='btn-order'

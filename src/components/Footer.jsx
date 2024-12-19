@@ -22,7 +22,9 @@ const Footer = () => {
               alt='icon phone'
             />
             <h6>Телефон</h6>
-            <p>+38 (099) 678 67 89</p>
+            <p className='footer_contacts_item_phone font-grotesque'>
+              +38 (099) 678 67 89
+            </p>
           </div>
           <div className='footer_contacts_item'>
             <img
@@ -50,7 +52,13 @@ const Footer = () => {
         >
           Політика Конфіденційності
         </Link>
-        <p className='footer_bottom_text'>@2024 Helplift. All rights reserved</p>
+        <p className='footer_bottom_text'>
+          @
+          <span className='font-grotesque'>
+            {`2024 `}
+          </span>
+          Helplift. All rights reserved
+        </p>
       </div>
     </footer>
   );

@@ -51,7 +51,6 @@ const HomePage = () => {
 
   /* Scrolls to the target section after navigating from another page */
   useEffect(() => {
-    console.log(location)
     if (location.hash) {
       const elementId = location.hash.substring(1);
       const scrollToElement = () => {
