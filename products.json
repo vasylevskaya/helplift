@@ -27,8 +27,7 @@
     "id": 2,
     "name": "Підйомники подовжені під медичну каталку",
     "images": [
-      "./images/products/2/201.jpg",
-      "./images/products/2/202.png"
+      "./images/products/2/201.jpg"
     ],
     "price": "від 45 тис",
     "to_order": true,
