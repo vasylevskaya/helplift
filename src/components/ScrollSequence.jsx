@@ -43,7 +43,7 @@ const ScrollSequence = () => {
     return Array.from({ length: totalStages }, (_, index) => {
       return sectionTop + index * stageHeight;
     });
-  };  
+  };
 
   const preventDefault = (e) => e.preventDefault();
 
@@ -103,7 +103,7 @@ const ScrollSequence = () => {
         }
 
         updateImage(newCurrentIndex);
-      }, 20);
+      }, 25);
     }
 
     startAnimation();

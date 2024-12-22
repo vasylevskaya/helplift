@@ -5,6 +5,33 @@
   position: relative;
 }
 
+/* video */
+.png__sequence__video {
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  /* position: absolute; */
+  position: sticky;
+  z-index: 1;
+  object-fit: cover;
+  opacity: 0;
+}
+
+.btn-switch {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  z-index: 500;
+}
+
+.png__sequence__video.visible {
+  opacity: 1;
+}
+/* video */
+
 .skip-animation_btns {
   z-index: 70;
   display: flex;
