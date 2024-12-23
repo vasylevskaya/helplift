@@ -1124,9 +1124,6 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
   transition: opacity 300ms;
 }
 
-.product-card:not(.hovered) .hover-circle {
-}
-
 .product-card.hovered .hover-circle {
   animation-name: circleAppear;
   animation-duration: 500ms;

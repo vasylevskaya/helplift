@@ -173,7 +173,7 @@ const ScrollSequence = () => {
       if (isAnimTextVisible) setIsAnimTextVisible(false)
 
       if (currentScroll <= firstStageTopPoint && currentStage !== 0) {
-        console.log('reseting to 0')
+        // Reseting to the first stage
         const newStage = 0
         setCurrentStage(newStage)
         currentFrameIndexRef.current = frameIndexesRange[0]
@@ -181,7 +181,7 @@ const ScrollSequence = () => {
         updateImage(newCurrentIndex)
 
       } else if (currentScroll >= lastStageTopPoint && currentStage !== totalStages - 1) {
-        console.log('reseting to last')
+        // Reseting to the last stage
         const newStage = totalStages - 1
         setCurrentStage(newStage)
         currentFrameIndexRef.current = frameIndexesRange[totalStages - 1]

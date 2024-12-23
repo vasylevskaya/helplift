@@ -11,6 +11,7 @@ const ScrollSequenceVideo = () => {
   const [textStage, setTextStage] = useState(0); // 0 - 2
   const textStageRef = useRef(textStage);
   const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
+  const isAnimTextVisibleRef = useRef(isAnimTextVisible);
   const currentStageRef = useRef(0);
   const isAnimatingRef = useRef(false);
   const forwardVideoRef = useRef(null);
@@ -37,7 +38,6 @@ const ScrollSequenceVideo = () => {
     const sectionHeight = sectionRef.current.offsetHeight;
     const sectionTop = sectionRef.current.offsetTop;
     const stageHeight = (sectionHeight - window.innerHeight / 2) / (totalStages);
-    //console.log(sectionHeight, stageHeight)
     return Array.from({ length: totalStages }, (_, index) => {
       return sectionTop + index * stageHeight;
     });
@@ -52,7 +52,6 @@ const ScrollSequenceVideo = () => {
   };
 
   const enableScroll = () => {
-    console.log('ENABLE ANIMATING')
     isAnimatingRef.current = false;
     window.removeEventListener('wheel', preventDefault, { passive: false });
     window.removeEventListener('touchmove', preventDefault, { passive: false });
@@ -65,13 +64,15 @@ const ScrollSequenceVideo = () => {
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const currentScroll = window.scrollY;
-    //console.log(currentScroll, scrollPoints)
+    //.log(currentScroll, scrollPoints)
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
 
       if (currentStageRef.current === 0 && !isScrollDown) {
-        console.log('go up')
-        setIsAnimTextVisible(false)
+        setIsAnimTextVisible(() => {
+          isAnimTextVisibleRef.current = false
+          return false;
+        })
        /*  window.scrollTo({
           top: sectionRef.current.offsetTop - sectionRef.current.offsetHeight / totalStages,
           behavior: 'smooth',
@@ -80,8 +81,10 @@ const ScrollSequenceVideo = () => {
         return;
       };
       if (currentStageRef.current === totalStages - 1 && isScrollDown) {
-        console.log('go down')
-        setIsAnimTextVisible(false)
+        setIsAnimTextVisible(() => {
+          isAnimTextVisibleRef.current = false
+          return false;
+        })
        /*  window.scrollTo({
           top: sectionRef.current.offsetTop + sectionRef.current.offsetHeight,
           behavior: 'smooth',
@@ -90,8 +93,11 @@ const ScrollSequenceVideo = () => {
         return;
       };
 
-      if (!isAnimTextVisible) {
-        setIsAnimTextVisible(true)
+      if (!isAnimTextVisibleRef.current) {
+        setIsAnimTextVisible(() => {
+          isAnimTextVisibleRef.current = true
+          return true;
+        })
       }
 
       const video = isScrollDown
@@ -155,7 +161,7 @@ const ScrollSequenceVideo = () => {
         video.pause();
       }, stopTimeoutTime);
     } else {
-      if (isAnimTextVisible) {
+      if (isAnimTextVisibleRef.current) {
         setIsAnimTextVisible(false)
       }
 
@@ -185,6 +191,10 @@ const ScrollSequenceVideo = () => {
       window.removeEventListener("wheel", handleScroll);
     };
   }, [scrollPoints]);
+
+  useEffect(() => {
+    isAnimTextVisibleRef.current = isAnimTextVisible;
+  }, [isAnimTextVisible]);
 
   return (
     <div className="png__sequence" ref={sectionRef}>

@@ -1,25 +1,43 @@
-Documentation
+1. Helplift | [https://helplift.com.ua]
+Framework: React.js
+Libraries:
+- emailjs/browser: Handles contact form messages
+- fortawesome/fontawesome-free: Provides icons
+- formik: Manages the contact form
+- recoil: Manages state
+- yup: Validates forms
 
-Packages:
-- Recoil (state management)
-- FontAwesome (icons)
+2. Getting Started
+After cloning the repository, run the following commands:
+npm install
+npm start
 
-Assets:
-- /images (general images and icons);
-- /products (separate folder for each product)
-- /scroll-sequence:
-/images-low (images for animation)
-renaming.js (run to automatically rename all images)
-ScrollSequenceImagesImport.js - imports all images for animation
-- product.json - products info
-- routes.json - routes info
-- text-content.json - for bigger texts; can be used for localisation in future
-- contact-form - JSON for rendering contact form
+3. Project Structure
+/src  
+  /assets  
+    /images                # General images and icons  
+    /products              # Separate folder for each product  
+    /scroll-sequence       # Video sequences for the animated section  
+  /product.json            # Product information  
+  /routes.json             # Routes information  
+  /text-content.json       # Texts for localization (future use)  
+  /contact-form            # JSON for rendering the contact form  
+  /components              # Reusable UI components  
+  /pages                   # Page-specific components  
+  /recoil  
+    atoms.js               # Atoms for state management  
+  /styles                  # Stylesheets  
+  App.jsx                  # Main app file  
+  index.js                 # Root file  
 
-Animated Section (scroll sequence):
-1. Changing images:
-- Images are stored in assets/scroll-sequence/images.
-- You can run renaming.js file to format images' names automatically.
-- Adjust length in ScrollSequenceImagesImport (should be equal to images quantity).
-- Adjust start points of the stages in ScrolSequence.jsx (frameIndexesRange)
+4. Deployment
+The website is deployed on GitHub Pages. To deploy:
+npm run deploy
 
+5. Feature: ScrollSequenceVideo.jsx
+Animated section with a video that plays forward and reverse based on scroll direction.
+
+Steps to update the video:
+- Replace videoForward and videoReverse files with the new video files.
+- Adjust stopPointsForward and stopPointsReverse to align with the phases of the animation.
+- Test thoroughly to ensure the animation works as expected.
