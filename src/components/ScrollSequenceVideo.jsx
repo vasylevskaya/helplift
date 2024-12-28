@@ -194,6 +194,7 @@ const ScrollSequenceVideo = () => {
         muted
         preload="auto"
         ref={forwardVideoRef}
+        playsInline
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
       >
         <source
@@ -206,6 +207,7 @@ const ScrollSequenceVideo = () => {
         muted
         preload="auto"
         ref={reverseVideoRef}
+        playsInline
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
       >
         <source
