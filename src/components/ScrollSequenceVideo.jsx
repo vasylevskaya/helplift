@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRecoilState } from "recoil";
+import { useMediaQuery } from 'react-responsive'
 import { animationTextVisibleState } from "../recoil/atoms";
 import SkipAnimation from "./SkipAnimation";
 import videoForward from '../assets/scroll-sequence/video-original.mp4';
 import videoReverse from '../assets/scroll-sequence/video-reverse.mp4';
+import videoForwardMob from '../assets/scroll-sequence/video-original-mob.mp4';
+import videoReverseMob from '../assets/scroll-sequence/video-reverse-mob.mp4';
+
 
 const ScrollSequenceVideo = () => {
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 700px)' })
   const [isForward, setIsForward] = useState(true);
   const isForwardRef = useRef(isForward);
   const [textStage, setTextStage] = useState(0); // 0 - 2
@@ -201,13 +206,13 @@ const ScrollSequenceVideo = () => {
       <SkipAnimation />
       <video
         ref={forwardVideoRef}
-        src={videoForward}
+        src={isTabletOrMobile ? videoForwardMob : videoForward}
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
         muted
       />
       <video
         ref={reverseVideoRef}
-        src={videoReverse}
+        src={isTabletOrMobile ? videoReverseMob : videoReverse}
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
         muted
       />

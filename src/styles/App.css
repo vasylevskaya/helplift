@@ -20,6 +20,10 @@
   opacity: 0;
 }
 
+.png__sequence__video.visible {
+  opacity: 1;
+}
+
 .btn-switch {
   position: absolute;
   top: 100px;
@@ -27,9 +31,6 @@
   z-index: 500;
 }
 
-.png__sequence__video.visible {
-  opacity: 1;
-}
 /* video */
 
 .skip-animation_btns {
@@ -40,8 +41,8 @@
   top: calc(100vh - 90px);
   left: 50%;
   width: fit-content;
-  margin: 50px 0;
-  padding: 10px 0;
+  /* margin: 50px 0;
+  padding: 10px 0; */
   color: black;
   border: none;
   border-radius: 12px;
@@ -49,6 +50,12 @@
   font-weight: 600;
   cursor: pointer;
   transform: translateX(-50%);
+}
+
+@media (max-width: 700px) {
+  .skip-animation_btns {
+    top: calc(100vh - 70px);
+  }
 }
 
 .skip-animation_btns_btn {
@@ -91,16 +98,44 @@
   position: fixed;
   top: 150px;
   right: 30px;
-  max-width: 350px;
+  max-width: 320px;
   z-index: 40;
   transition: 300ms ease-in-out;
   opacity: 0;
 }
 
+@media (max-width: 1200px) {
+  .png__sequence__text_part {
+    max-width: 270px;
+    right: 20px;
+  }
+}
 
 @media (max-width: 1100px) {
   .png__sequence__text_part {
-    max-width: 300px
+    bottom: 110px;
+    top: unset;
+    left: 150px;
+  }
+}
+
+@media (max-width: 950px) {
+  .png__sequence__text_part {
+    left: 100px;
+  }
+}
+
+@media (max-width: 850px) {
+  .png__sequence__text_part {
+    left: 70px;
+  }
+}
+
+@media (max-width: 700px) { 
+  .png__sequence__text_part {
+    max-width: unset;
+    left: 20px;
+    right: 70px;
   }
 }
 
@@ -121,9 +156,34 @@
   margin: 0 0 20px;
 }
 
+@media (max-width: 1200px) {
+  .png__sequence__text_part p:first-of-type {
+    font-size: 32px;
+    margin: 0 0 15px;
+  }
+}
+
+@media (max-width: 700px) { 
+  .png__sequence__text_part p:first-of-type {
+    font-size: 26px;
+  }
+}
+
 .png__sequence__text_part p:nth-of-type(2) {
   font-size: 20px;
   margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .png__sequence__text_part p:nth-of-type(2) {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 700px) { 
+  .png__sequence__text_part p:nth-of-type(2) {
+    font-size: 16px;
+  }
 }
 
 @keyframes textAppear {
