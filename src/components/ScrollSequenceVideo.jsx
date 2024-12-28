@@ -73,27 +73,13 @@ const ScrollSequenceVideo = () => {
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
 
-      if (currentStageRef.current === 0 && !isScrollDown) {
+      /* Go up or go down out of animation */
+      if ((currentStageRef.current === 0 && !isScrollDown) ||
+        (currentStageRef.current === totalStages - 1 && isScrollDown)) {
         setIsAnimTextVisible(() => {
           isAnimTextVisibleRef.current = false
           return false;
         })
-       /*  window.scrollTo({
-          top: sectionRef.current.offsetTop - sectionRef.current.offsetHeight / totalStages,
-          behavior: 'smooth',
-        }); */
-        enableScroll()
-        return;
-      };
-      if (currentStageRef.current === totalStages - 1 && isScrollDown) {
-        setIsAnimTextVisible(() => {
-          isAnimTextVisibleRef.current = false
-          return false;
-        })
-       /*  window.scrollTo({
-          top: sectionRef.current.offsetTop + sectionRef.current.offsetHeight,
-          behavior: 'smooth',
-        }); */
         enableScroll()
         return;
       };
@@ -147,7 +133,7 @@ const ScrollSequenceVideo = () => {
       let newTextStage = textStageRef.current
 
       if (isScrollDown && currentStageRef.current !== textStageRef.current) {
-        newTextStage = currentStageRef.current 
+        newTextStage = currentStageRef.current
       } else if (!isScrollDown && currentStageRef.current - 1 !== textStageRef.current) {
         newTextStage = currentStageRef.current - 1
       }
@@ -205,17 +191,29 @@ const ScrollSequenceVideo = () => {
     <div className="png__sequence" ref={sectionRef}>
       <SkipAnimation />
       <video
+        muted
+        preload="auto"
         ref={forwardVideoRef}
-        src={isTabletOrMobile ? videoForwardMob : videoForward}
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
-        muted
-      />
+      >
+        <source
+          src={isTabletOrMobile ? videoForwardMob : videoForward}
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
       <video
-        ref={reverseVideoRef}
-        src={isTabletOrMobile ? videoReverseMob : videoReverse}
-        className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
         muted
-      />
+        preload="auto"
+        ref={reverseVideoRef}
+        className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
+      >
+        <source
+          src={isTabletOrMobile ? videoReverseMob : videoReverse}
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
       <div className={`png__sequence__text ${isAnimTextVisible ? 'visible' : 'hidden'}`}>
         <div className={`png__sequence__text_part ${textStage === 0 ? 'visible' : 'hidden'}`}>
           <p>{'1. Заїзд на підйомник:'}</p>
