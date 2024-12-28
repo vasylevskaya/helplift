@@ -7,6 +7,7 @@ import videoForward from '../assets/scroll-sequence/video-original.mp4';
 import videoReverse from '../assets/scroll-sequence/video-reverse.mp4';
 import videoForwardMob from '../assets/scroll-sequence/video-original-mob.mp4';
 import videoReverseMob from '../assets/scroll-sequence/video-reverse-mob.mp4';
+import AutoPlaySilentVideo from '../hooks/AutoPlaySilentVideo';
 
 
 const ScrollSequenceVideo = () => {
@@ -190,32 +191,16 @@ const ScrollSequenceVideo = () => {
   return (
     <div className="png__sequence" ref={sectionRef}>
       <SkipAnimation />
-      <video
-        muted
-        preload="auto"
-        ref={forwardVideoRef}
-        playsInline
+      <AutoPlaySilentVideo
+        video={isTabletOrMobile ? videoForwardMob : videoForward}
+        videoRef={forwardVideoRef}
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
-      >
-        <source
-          src={isTabletOrMobile ? videoForwardMob : videoForward}
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
-      <video
-        muted
-        preload="auto"
-        ref={reverseVideoRef}
-        playsInline
+      />
+      <AutoPlaySilentVideo
+        video={isTabletOrMobile ? videoReverseMob : videoReverse}
+        videoRef={reverseVideoRef}
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
-      >
-        <source
-          src={isTabletOrMobile ? videoReverseMob : videoReverse}
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
+      />
       <div className={`png__sequence__text ${isAnimTextVisible ? 'visible' : 'hidden'}`}>
         <div className={`png__sequence__text_part ${textStage === 0 ? 'visible' : 'hidden'}`}>
           <p>{'1. Заїзд на підйомник:'}</p>
