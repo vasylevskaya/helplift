@@ -4,18 +4,16 @@ export default function AutoPlaySilentVideo({
   video,
   videoRef,
   className,
+  poster
 }) {
-  useEffect(() => {
-    videoRef.current.defaultMuted = true;
-  })
 
   return (
     <video
       className={className}
       ref={videoRef}
-      loop
       muted
       playsInline
+      poster={poster}
     >
       <source src={video} type="video/mp4"/>
       Your browser does not support the video tag.

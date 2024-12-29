@@ -8,6 +8,10 @@ import videoReverse from '../assets/scroll-sequence/video-reverse.mp4';
 import videoForwardMob from '../assets/scroll-sequence/video-original-mob.mp4';
 import videoReverseMob from '../assets/scroll-sequence/video-reverse-mob.mp4';
 import AutoPlaySilentVideo from '../hooks/AutoPlaySilentVideo';
+import posterForward from '../assets/images/poster-original.jpg';
+import posterReverse from '../assets/images/poster-reverse.jpg';
+import posterForwardMob from '../assets/images/poster-original-mob.webp';
+import posterReverseMob from '../assets/images/poster-reverse-mob.webp';
 
 
 const ScrollSequenceVideo = () => {
@@ -54,12 +58,14 @@ const ScrollSequenceVideo = () => {
   const disableScroll = () => {
     isAnimatingRef.current = true;
     window.addEventListener('wheel', preventDefault, { passive: false });
+    window.addEventListener('scroll', preventDefault, { passive: false });
     window.addEventListener('touchmove', preventDefault, { passive: false });
   };
 
   const enableScroll = () => {
     isAnimatingRef.current = false;
     window.removeEventListener('wheel', preventDefault, { passive: false });
+    window.removeEventListener('scroll', preventDefault, { passive: false });
     window.removeEventListener('touchmove', preventDefault, { passive: false });
   };
 
@@ -180,9 +186,11 @@ const ScrollSequenceVideo = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("wheel", handleScroll);
+    window.addEventListener("touchMove", handleScroll);
     return () => {
       window.addEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleScroll);
+      window.addEventListener("touchMove", handleScroll);
     };
   }, [scrollPoints]);
 
@@ -197,11 +205,13 @@ const ScrollSequenceVideo = () => {
         video={isTabletOrMobile ? videoForwardMob : videoForward}
         videoRef={forwardVideoRef}
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
+        poster={isTabletOrMobile ? posterForwardMob : posterForward}
       />
       <AutoPlaySilentVideo
         video={isTabletOrMobile ? videoReverseMob : videoReverse}
         videoRef={reverseVideoRef}
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
+        poster={isTabletOrMobile ? posterReverseMob : posterReverse}
       />
       <div className={`png__sequence__text ${isAnimTextVisible ? 'visible' : 'hidden'}`}>
         <div className={`png__sequence__text_part ${textStage === 0 ? 'visible' : 'hidden'}`}>
