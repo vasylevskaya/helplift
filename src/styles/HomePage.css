@@ -221,6 +221,10 @@
 }
 /* end section image text */
 
+.section-animated_text {
+  overflow: hidden;
+}
+
 .section-products {
   min-height: 100vh;
   /* padding-left: calc(16.6% + 26px + 45px); */

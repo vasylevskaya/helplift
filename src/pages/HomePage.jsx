@@ -19,6 +19,8 @@ const HomePage = () => {
   const toggleHeaderTheme = () => {
     const currentScroll = window.scrollY;
 
+    //console.log(currentScroll, animatedSectionRef.current.offsetTop, animatedSectionRef.current.offsetHeight)
+
     if (headerTheme === 'dark') {
       if ((currentScroll >= aboutUsSectionRef.current.offsetTop 
         && currentScroll < aboutUsSectionRef.current.offsetTop + aboutUsSectionRef.current.offsetHeight)

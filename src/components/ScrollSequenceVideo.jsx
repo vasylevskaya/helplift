@@ -178,8 +178,10 @@ const ScrollSequenceVideo = () => {
   };
 
   useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
     window.addEventListener("wheel", handleScroll);
     return () => {
+      window.addEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleScroll);
     };
   }, [scrollPoints]);
