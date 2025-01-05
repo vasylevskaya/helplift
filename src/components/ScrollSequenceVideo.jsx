@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRecoilState } from "recoil";
 import { useMediaQuery } from 'react-responsive'
+import throttle from 'lodash.throttle';
 import { animationTextVisibleState } from "../recoil/atoms";
 import SkipAnimation from "./SkipAnimation";
 import videoForward from '../assets/scroll-sequence/video-original.mp4';
@@ -12,6 +13,7 @@ import posterForward from '../assets/images/poster-original.jpg';
 import posterReverse from '../assets/images/poster-reverse.jpg';
 import posterForwardMob from '../assets/images/poster-original-mob.webp';
 import posterReverseMob from '../assets/images/poster-reverse-mob.webp';
+import ScrollSequenceText from './ScrollSequenceText';
 
 
 const ScrollSequenceVideo = () => {
@@ -35,10 +37,10 @@ const ScrollSequenceVideo = () => {
     6640 //12000 // End of stage 2
   ];
   const stopPointsReverse = [
-    6640, //12000, // Start of stage 0 'in'
-    4440, //10000, // Start of stage 1 'up'
-    2340, //6000, // Start of stage 2 'out'
-    0,    // 0, End of stage 2
+    6640, // Start of stage 0 'in'
+    4440, // Start of stage 1 'up' (6640 - 2200)
+    2340, // Start of stage 2 'out' (6640 - 4300)
+    0,    // End of stage 2
   ];
 
   const totalStages = stopPointsForward.length;
@@ -59,30 +61,31 @@ const ScrollSequenceVideo = () => {
     isAnimatingRef.current = true;
     window.addEventListener('wheel', preventDefault, { passive: false });
     window.addEventListener('scroll', preventDefault, { passive: false });
-    window.addEventListener('touchmove', preventDefault, { passive: false });
   };
 
   const enableScroll = () => {
     isAnimatingRef.current = false;
     window.removeEventListener('wheel', preventDefault, { passive: false });
     window.removeEventListener('scroll', preventDefault, { passive: false });
-    window.removeEventListener('touchmove', preventDefault, { passive: false });
   };
 
-  const handleScroll = (e) => {
-    if (isAnimatingRef.current) return;
-
-    const isScrollDown = e.deltaY > 0;
+  const animate = (isScrollDown) => {
+    console.log(isScrollDown)
+  
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const currentScroll = window.scrollY;
-    //.log(currentScroll, scrollPoints)
+
+    //console.log(currentScroll, firstStageTopPoint, lastStageTopPoint)
+
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
+      console.log('in section', currentStageRef.current, textStageRef.current)
 
       /* Go up or go down out of animation */
       if ((currentStageRef.current === 0 && !isScrollDown) ||
         (currentStageRef.current === totalStages - 1 && isScrollDown)) {
+          //console.log('go up and down')
         setIsAnimTextVisible(() => {
           isAnimTextVisibleRef.current = false
           return false;
@@ -98,6 +101,8 @@ const ScrollSequenceVideo = () => {
         })
       }
 
+      //console.log('continue')
+
       const video = isScrollDown
         ? forwardVideoRef.current
         : reverseVideoRef.current;
@@ -105,6 +110,8 @@ const ScrollSequenceVideo = () => {
       const hiddenVideo = isScrollDown
         ? reverseVideoRef.current
         : forwardVideoRef.current;
+
+      console.log(video.duration, hiddenVideo.duration)
 
       if (isForwardRef.current !== isScrollDown) {
         setIsForward((prevIsForward) => {
@@ -149,16 +156,19 @@ const ScrollSequenceVideo = () => {
       setTextStage(newTextStage)
 
       // Milliseconds to seconds
+
       hiddenVideo.currentTime = newStopPointHiddenVideo / 1000;
 
       currentStageRef.current = newStage;
 
       setTimeout(() => {
+        console.log('stop animation', stopTimeoutTime)
         enableScroll();
         // STOP ANIMATION
         video.pause();
       }, stopTimeoutTime);
     } else {
+      //console.log('out animation', isAnimTextVisibleRef.current)
       if (isAnimTextVisibleRef.current) {
         setIsAnimTextVisible(false)
       }
@@ -181,16 +191,29 @@ const ScrollSequenceVideo = () => {
         }
       }
     }
-  };
+  }
+
+  let prevScrollY = 0;
+
+  const handleScroll = throttle(() => {
+    const { scrollY } = window;
+
+    if (prevScrollY === scrollY || isAnimatingRef.current) {
+      prevScrollY = scrollY;
+      return
+    };
+
+    const isScrollDown = prevScrollY < scrollY;
+    prevScrollY = scrollY;
+    animate(isScrollDown);
+}, 200);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("wheel", handleScroll);
-    window.addEventListener("touchMove", handleScroll);
     return () => {
       window.addEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleScroll);
-      window.addEventListener("touchMove", handleScroll);
     };
   }, [scrollPoints]);
 
@@ -213,20 +236,10 @@ const ScrollSequenceVideo = () => {
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
         poster={isTabletOrMobile ? posterReverseMob : posterReverse}
       />
-      <div className={`png__sequence__text ${isAnimTextVisible ? 'visible' : 'hidden'}`}>
-        <div className={`png__sequence__text_part ${textStage === 0 ? 'visible' : 'hidden'}`}>
-          <p>{'1. Заїзд на підйомник:'}</p>
-          <p>{'Користувач заїжджає на платформу підйомника'}</p>
-        </div>
-        <div className={`png__sequence__text_part ${textStage === 1 ? 'visible' : 'hidden'}`}>
-          <p>{'2. Підйом:'}</p>
-          <p>{'Користувач натискає кнопку, і підйомник плавно піднімається до потрібного рівня.'}</p>
-        </div>
-        <div className={`png__sequence__text_part ${textStage === 2 ? 'visible' : 'hidden'}`}>
-          <p>{'3. Виїзд з підйомника:'}</p>
-          <p>{'Брамка відкривається, дозволяючи користувачу безпечно виїхати.'}</p>
-        </div>
-      </div>
+      <ScrollSequenceText
+        isAnimTextVisible={isAnimTextVisible}
+        textStage={textStage}
+      />
     </div>
   );
 };

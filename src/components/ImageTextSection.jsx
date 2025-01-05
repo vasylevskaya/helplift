@@ -14,7 +14,6 @@ const ImageTextSection = () => {
 
   // get image according to the screen size and orientation
   const getImage = () => {
-    console.log(isTabletHorizontal, isTabletVertical, isMobHorizontal, isMobVertical)
     if (isTabletHorizontal) return imgTabletHorizontal;
     if (isTabletVertical) return imgTabletVertical;
     if (isMobHorizontal) return imgMobHorizontal;
