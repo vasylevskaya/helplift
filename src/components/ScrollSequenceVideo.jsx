@@ -111,7 +111,7 @@ const ScrollSequenceVideo = () => {
         ? reverseVideoRef.current
         : forwardVideoRef.current;
 
-      console.log(video.duration, hiddenVideo.duration)
+      console.log(forwardVideoRef.current.duration, reverseVideoRef.current.duration)
 
       if (isForwardRef.current !== isScrollDown) {
         setIsForward((prevIsForward) => {
@@ -209,6 +209,7 @@ const ScrollSequenceVideo = () => {
 }, 200);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("wheel", handleScroll);
     return () => {

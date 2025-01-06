@@ -70,3 +70,13 @@ code {
   letter-spacing: 0.3px;
   font-size: 1.1em;
 }
+
+.full-viewport-height {
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .full-viewport-height {
+    height: 100dvh;
+  }
+}

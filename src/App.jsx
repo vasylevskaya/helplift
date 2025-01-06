@@ -13,7 +13,10 @@ import CornerButtons from './components/CornerButtons';
 const App = () => {
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    setTimeout(function(){
+      // Hide the address bar!
+      window.scrollTo(0, 1);
+     }, 0);
   }, []);
 
   return (

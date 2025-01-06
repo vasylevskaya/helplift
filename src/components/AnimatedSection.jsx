@@ -1,5 +1,4 @@
 import React from 'react';
-import ScrollSequence from './ScrollSequence';
 import ScrollSequenceVideo from './ScrollSequenceVideo';
 
 const AnimatedSection = () => {

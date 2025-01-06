@@ -72,40 +72,10 @@
 /* start section image text */
 .section-image-text {
   position: relative;
-  /* background: url(../assets/images/scene.png) no-repeat center center;
-  background-size: cover; */
   background-color: white;
   height: 100vh;
 }
 
-/* Tablet Horizontal */
-/* @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .section-image-text {
-    background-image: url(../assets/images/scene-tablet-horizontal.png);
-  }
-} */
-
-/* Tablet Vertical */
-/* @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-  .section-image-text {
-    background-image: url(../assets/images/scene-tablet-vertical.png);
-  }
-} */
-
-/* Mobile Horizontal */
-/* @media (max-width: 767px) and (orientation: landscape) {
-  .section-image-text {
-    background-image: url(../assets/images/scene-mob-horizontal.png);
-  }
-}
- */
-/* Mobile Vertical */
-/* @media (max-width: 767px) and (orientation: portrait) {
-  .section-image-text {
-    background-image: url(../assets/images/scene-tablet-vertical.png);
-  }
-}
- */
 .section-image-text_bg-img {
   position: absolute;
   top: 0;
