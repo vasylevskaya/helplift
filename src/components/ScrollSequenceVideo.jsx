@@ -76,11 +76,8 @@ const ScrollSequenceVideo = () => {
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const currentScroll = window.scrollY;
 
-    //console.log(currentScroll, firstStageTopPoint, lastStageTopPoint)
-
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
-      console.log('in section', currentStageRef.current, textStageRef.current)
 
       /* Go up or go down out of animation */
       if ((currentStageRef.current === 0 && !isScrollDown) ||
@@ -208,16 +205,20 @@ const ScrollSequenceVideo = () => {
     animate(isScrollDown);
 }, 200);
 
-  useEffect(() => {
-    setTimeout(() => {
-      window.addEventListener("scroll", handleScroll);
-      window.addEventListener("wheel", handleScroll);
-    })
-    return () => {
-      window.addEventListener("scroll", handleScroll);
-      window.removeEventListener("wheel", handleScroll);
-    };
-  }, [scrollPoints]);
+useEffect(() => {
+  /* timer to wait for scroll to top when page is loaded */
+  const timeoutId = setTimeout(() => {
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("wheel", handleScroll);
+  }, 1000);
+
+  return () => {
+    clearTimeout(timeoutId); // Clear the timeout
+    window.removeEventListener("scroll", handleScroll);
+    window.removeEventListener("wheel", handleScroll);
+  };
+}, [scrollPoints]);
+
 
   useEffect(() => {
     isAnimTextVisibleRef.current = isAnimTextVisible;
