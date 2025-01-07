@@ -15,6 +15,14 @@ import posterForwardMob from '../assets/images/poster-original-mob.webp';
 import posterReverseMob from '../assets/images/poster-reverse-mob.webp';
 import ScrollSequenceText from './ScrollSequenceText';
 
+ /* Parts start*/
+import videoForwardMobPhase1 from '../assets/scroll-sequence/forward-mob-1.mp4';
+import videoForwardMobPhase2 from '../assets/scroll-sequence/forward-mob-2.mp4';
+import videoForwardMobPhase3 from '../assets/scroll-sequence/forward-mob-3.mp4';
+import videoReverseMobPhase1 from '../assets/scroll-sequence/reverse-mob-1.mp4';
+import videoReverseMobPhase2 from '../assets/scroll-sequence/reverse-mob-2.mp4';
+import videoReverseMobPhase3 from '../assets/scroll-sequence/reverse-mob-3.mp4';
+/* Parts end */
 
 const ScrollSequenceVideo = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 700px)' })
@@ -25,8 +33,27 @@ const ScrollSequenceVideo = () => {
   const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
   const isAnimTextVisibleRef = useRef(isAnimTextVisible);
   const currentStageRef = useRef(0);
+  const [currentStage, setCurrentStage] = useState(0);
   const isAnimatingRef = useRef(false);
   const forwardVideoRef = useRef(null);
+  /* Parts start*/
+  const forwardPhase1Ref = useRef(null);
+  const forwardPhase2Ref = useRef(null);
+  const forwardPhase3Ref = useRef(null);
+  const reversePhase1Ref = useRef(null);
+  const reversePhase2Ref = useRef(null);
+  const reversePhase3Ref = useRef(null);
+  const forwardVideos = [
+    forwardPhase1Ref,
+    forwardPhase2Ref,
+    forwardPhase3Ref
+  ]
+  const reverseVideos = [
+    reversePhase1Ref,
+    reversePhase2Ref,
+    reversePhase3Ref
+  ]
+  /* Parts end */
   const reverseVideoRef = useRef(null);
   const sectionRef = useRef(null);
 
@@ -45,7 +72,7 @@ const ScrollSequenceVideo = () => {
 
   const totalStages = stopPointsForward.length;
 
-  const scrollPoints = useMemo(() => {
+  const getScrollPoints = () => {
     if (!sectionRef.current) return [];
     const sectionHeight = sectionRef.current.offsetHeight;
     const sectionTop = sectionRef.current.offsetTop;
@@ -53,9 +80,16 @@ const ScrollSequenceVideo = () => {
     return Array.from({ length: totalStages }, (_, index) => {
       return sectionTop + index * stageHeight;
     });
-  }, [sectionRef.current?.offsetHeight, sectionRef.current?.offsetTop]);
+  };
 
   const preventDefault = (e) => e.preventDefault();
+
+  const switchDirection = () => {
+    setIsForward((prevIsForward) => {
+      isForwardRef.current = !prevIsForward;
+      return !prevIsForward;
+    });
+  }
 
   const disableScroll = () => {
     isAnimatingRef.current = true;
@@ -70,13 +104,10 @@ const ScrollSequenceVideo = () => {
   };
 
   const animate = (isScrollDown) => {
-    console.log(isScrollDown)
-  
+    const scrollPoints = getScrollPoints();
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const currentScroll = window.scrollY;
-
-    //console.log(currentScroll, firstStageTopPoint, lastStageTopPoint)
 
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
@@ -101,72 +132,86 @@ const ScrollSequenceVideo = () => {
         })
       }
 
-      //console.log('continue')
+      console.log('isForward?', isForward)
 
-      const video = isScrollDown
+      const videoRef = isScrollDown
+        ? forwardVideos[currentStageRef.current]
+        : reverseVideos[currentStageRef.current - 1]
+
+      
+      let video = videoRef?.current
+      if (!video) return
+
+      /* const video = isScrollDown
         ? forwardVideoRef.current
-        : reverseVideoRef.current;
+        : reverseVideoRef.current; */
 
-      const hiddenVideo = isScrollDown
+      /* const hiddenVideo = isScrollDown
         ? reverseVideoRef.current
-        : forwardVideoRef.current;
-
-      console.log(forwardVideoRef.current.duration, reverseVideoRef.current.duration)
+        : forwardVideoRef.current; */
 
       if (isForwardRef.current !== isScrollDown) {
-        setIsForward((prevIsForward) => {
-          isForwardRef.current = !prevIsForward;
-          return !prevIsForward;
-        });
+        switchDirection();
       }
 
       const newStage = isScrollDown
         ? currentStageRef.current + 1
         : currentStageRef.current - 1;
 
-      const stopPoints = isScrollDown
+      /* const stopPoints = isScrollDown
         ? stopPointsForward
-        : stopPointsReverse
+        : stopPointsReverse */
 
-      const stopPointsHiddenVideo = isScrollDown
+      /* const stopPointsHiddenVideo = isScrollDown
         ? stopPointsReverse
-        : stopPointsForward
+        : stopPointsForward */
 
-      const currentStopPoint = stopPoints[currentStageRef.current]
+      /* const currentStopPoint = stopPoints[currentStageRef.current]
       const newStopPoint = stopPoints[newStage];
       const newStopPointHiddenVideo = stopPointsHiddenVideo[newStage]
 
-      const stopTimeoutTime = Math.abs(newStopPoint - currentStopPoint);
+      const stopTimeoutTime = Math.abs(newStopPoint - currentStopPoint); */
 
       // Adjust scroll to scollPoint of current stage
       window.scrollTo({ top: scrollPoints[newStage] });
 
+      
       // START ANIMATION
-      video.play();
-
+      video
+      .play()
+      .catch((err) => console.error('Failed to play video:', err));
+      
       let newTextStage = textStageRef.current
-
+      
       if (isScrollDown && currentStageRef.current !== textStageRef.current) {
         newTextStage = currentStageRef.current
       } else if (!isScrollDown && currentStageRef.current - 1 !== textStageRef.current) {
         newTextStage = currentStageRef.current - 1
       }
-
+      
       textStageRef.current = newTextStage;
       setTextStage(newTextStage)
-
+      
       // Milliseconds to seconds
-
-      hiddenVideo.currentTime = newStopPointHiddenVideo / 1000;
-
-      currentStageRef.current = newStage;
-
+      
+      /* hiddenVideo.currentTime = newStopPointHiddenVideo / 1000; */
+      
+      console.log(video, currentStage)
+      
       setTimeout(() => {
-        console.log('stop animation', stopTimeoutTime)
-        enableScroll();
         // STOP ANIMATION
-        video.pause();
-      }, stopTimeoutTime);
+        
+        currentStageRef.current = newStage;
+        
+        setCurrentStage(newStage);
+        enableScroll();
+        
+        if (newStage === 0 || newStage === 3) { // if last stage - switch direction
+          switchDirection()
+        }
+        
+        video.currentTime = 0; // reset video to beginning
+      }, video.duration * 1000 + 400);
     } else {
       //console.log('out animation', isAnimTextVisibleRef.current)
       if (isAnimTextVisibleRef.current) {
@@ -176,7 +221,7 @@ const ScrollSequenceVideo = () => {
       if (currentScroll <= firstStageTopPoint && currentStageRef.current !== 0) {
        // Reseting to the first stage (when we skip animation UP)
         currentStageRef.current = 0;
-        forwardVideoRef.current.currentTime = stopPointsForward[0];
+        //forwardVideoRef.current.currentTime = stopPointsForward[0];
         setIsForward(true)
         isForwardRef.current = true;
 
@@ -185,7 +230,7 @@ const ScrollSequenceVideo = () => {
         if (reverseVideo) {
           // Reseting to the last stage (when we skip animation DOWN)
           currentStageRef.current = totalStages - 1;
-          reverseVideo.currentTime = stopPointsReverse[totalStages - 1];
+          //reverseVideo.currentTime = stopPointsReverse[totalStages - 1];
           setIsForward(false)
           isForwardRef.current = false;
         }
@@ -209,14 +254,15 @@ const ScrollSequenceVideo = () => {
 }, 200);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("wheel", handleScroll);
-    return () => {
+    setTimeout(() => {
       window.addEventListener("scroll", handleScroll);
+      window.addEventListener("wheel", handleScroll);
+    }, 1000)
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleScroll);
     };
-  }, [scrollPoints]);
+  }, []);
 
   useEffect(() => {
     isAnimTextVisibleRef.current = isAnimTextVisible;
@@ -226,6 +272,36 @@ const ScrollSequenceVideo = () => {
     <div className="png__sequence" ref={sectionRef}>
       <SkipAnimation />
       <AutoPlaySilentVideo
+        video={videoForwardMobPhase1}
+        videoRef={forwardPhase1Ref}
+        className={`png__sequence__video ${isForward && currentStage === 0 ? 'visible' : 'hidden'}`}
+      />
+      <AutoPlaySilentVideo
+        video={videoForwardMobPhase2}
+        videoRef={forwardPhase2Ref}
+        className={`png__sequence__video ${isForward && currentStage === 1 ? 'visible' : 'hidden'}`}
+      />
+      <AutoPlaySilentVideo
+        video={videoForwardMobPhase3}
+        videoRef={forwardPhase3Ref}
+        className={`png__sequence__video ${isForward && currentStage >= 2 ? 'visible' : 'hidden'}`}
+      />
+      <AutoPlaySilentVideo
+        video={videoReverseMobPhase1}
+        videoRef={reversePhase1Ref}
+        className={`png__sequence__video ${!isForward && currentStage <= 1 ? 'visible' : 'hidden'}`}
+      />
+      <AutoPlaySilentVideo
+        video={videoReverseMobPhase2}
+        videoRef={reversePhase2Ref}
+        className={`png__sequence__video ${!isForward && currentStage === 2 ? 'visible' : 'hidden'}`}
+      />
+      <AutoPlaySilentVideo
+        video={videoReverseMobPhase3}
+        videoRef={reversePhase3Ref}
+        className={`png__sequence__video ${!isForward && currentStage >= 3 ? 'visible' : 'hidden'}`}
+      />
+     {/*  <AutoPlaySilentVideo
         video={isTabletOrMobile ? videoForwardMob : videoForward}
         videoRef={forwardVideoRef}
         className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
@@ -236,7 +312,7 @@ const ScrollSequenceVideo = () => {
         videoRef={reverseVideoRef}
         className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
         poster={isTabletOrMobile ? posterReverseMob : posterReverse}
-      />
+      /> */}
       <ScrollSequenceText
         isAnimTextVisible={isAnimTextVisible}
         textStage={textStage}
