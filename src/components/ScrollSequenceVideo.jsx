@@ -209,9 +209,10 @@ const ScrollSequenceVideo = () => {
 }, 200);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("wheel", handleScroll);
+    setTimeout(() => {
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("wheel", handleScroll);
+    })
     return () => {
       window.addEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleScroll);
