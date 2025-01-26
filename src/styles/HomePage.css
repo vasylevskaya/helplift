@@ -94,7 +94,7 @@
   color: var(--black);
   background: linear-gradient(to right, #ffffffc4 0%, #ffffffb8 50%, #ffffff57 75%, transparent 100%);
   width: 65vw;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -111,7 +111,7 @@
     width: 100%;
     min-height: unset;
     justify-content: flex-start;
-    background: linear-gradient(to bottom, #ffffffc4 0%, #ffffffb8 50%, #ffffff57 75%, transparent 100%);
+    background: linear-gradient(to bottom, #ffffffc4 0%, #ffffffb8 15%, #ffffff57 30%, transparent 100%);
   }
 }
 

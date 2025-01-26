@@ -10,7 +10,7 @@ export const contactFormVisibleState = atom({
   default: false,
 });
 
-export const animationTextVisibleState = atom({
-  key: 'animationTextVisibleState',
+export const animationDisabledState = atom({
+  key: 'animationDisabledState',
   default: false,
 });

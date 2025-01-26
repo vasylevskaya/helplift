@@ -1,50 +1,25 @@
-import React, { useEffect } from 'react'
-import { useRecoilState } from "recoil";
-import { animationTextVisibleState } from "../recoil/atoms";
-
-const scrollToTop = () => {
-  /* let offset = 150; */
-  let progressWrap = document.querySelector(".progress-wrap");
-  let progressPath = document.querySelector(".progress-wrap path");
-  let pathLength = progressPath.getTotalLength();
-  const updateProgress = () => {
-    let scroll = window.pageYOffset;
-    let height = document.documentElement.scrollHeight - window.innerHeight;
-    let progress = pathLength - (scroll * pathLength) / height;
-    progressPath.style.strokeDashoffset = progress;
-  };
-  if (progressWrap) {
-    progressPath.style.transition = progressPath.style.WebkitTransition =
-      "none";
-    progressPath.style.strokeDasharray = pathLength + " " + pathLength;
-    progressPath.style.strokeDashoffset = pathLength;
-    progressPath.getBoundingClientRect();
-    progressPath.style.transition = progressPath.style.WebkitTransition =
-      "stroke-dashoffset 10ms linear";
-    updateProgress();
-    window.addEventListener("scroll", updateProgress);
-    /* window.addEventListener("scroll", function () {
-      if (window.pageYOffset > offset) {
-        progressWrap.classList.add("active-progress");
-      } else {
-        document
-          .querySelector(".progress-wrap")
-          .classList.remove("active-progress");
-      }
-    }); */
-  }
-};
+import React from 'react'
+import { hideAllVisibleText } from '../helpers/animationText';
+import { useRecoilState } from 'recoil';
+import { animationDisabledState } from '../recoil/atoms';
 
 const ScrollToTop = () => {
-  const [, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
-
-  useEffect(() => scrollToTop(), []);
+  const [, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
 
   const handleClick = (event) => {
     event.preventDefault();
-    setIsAnimTextVisible(false)
+    /* disable animation to avoid trigerring it when using navigation or scroll to top */
+    setAnimationDisabledGlobally(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+    
+    /* enable animation after scroll */
+    setTimeout(() => {
+      setAnimationDisabledGlobally(false);
+    }, 500);
+  
+    //hideAllVisibleText();
+  };
+  
 
   return (
     <button

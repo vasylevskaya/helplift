@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useRecoilState } from "recoil";
 import { useMediaQuery } from 'react-responsive'
+import { useRecoilState } from 'recoil';
+import { animationDisabledState } from '../recoil/atoms';
 import throttle from 'lodash.throttle';
-import { animationTextVisibleState } from "../recoil/atoms";
 import SkipAnimation from "./SkipAnimation";
 import videoForward from '../assets/scroll-sequence/video-original.mp4';
 import videoReverse from '../assets/scroll-sequence/video-reverse.mp4';
@@ -14,34 +14,49 @@ import posterReverse from '../assets/images/poster-reverse.jpg';
 import posterForwardMob from '../assets/images/poster-original-mob.webp';
 import posterReverseMob from '../assets/images/poster-reverse-mob.webp';
 import ScrollSequenceText from './ScrollSequenceText';
+import { hideAllVisibleText, makeTextVisible, toggleSkipAnimation } from '../helpers/animationText';
 
 
 const ScrollSequenceVideo = () => {
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 700px)' })
+  const isTabletOrMobile = useMediaQuery({
+    query: "(max-width: 700px) and (orientation: portrait), (max-height: 700px) and (orientation: landscape)"
+  });
+  const isTabletOrMobileVertical = useMediaQuery({
+    query: "(max-width: 700px) and (orientation: portrait)"
+  });
   const [isForward, setIsForward] = useState(true);
   const isForwardRef = useRef(isForward);
-  const [textStage, setTextStage] = useState(0); // 0 - 2
+  const [textStage, setTextStage] = useState(-1); // -1 - 2
   const textStageRef = useRef(textStage);
-  const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
-  const isAnimTextVisibleRef = useRef(isAnimTextVisible);
   const currentStageRef = useRef(0);
   const isAnimatingRef = useRef(false);
   const forwardVideoRef = useRef(null);
   const reverseVideoRef = useRef(null);
   const sectionRef = useRef(null);
+  const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
+  const animationDisabledGloballyRef = useRef(animationDisabledGlobally);
 
-  const stopPointsForward = [
-    0,    // 0, Start of stage 0 'in'
-    2200, // 2000, Start of stage 1 'up'
-    4300, //6000, // Start of stage 2 'out'
-    6640 //12000 // End of stage 2
-  ];
-  const stopPointsReverse = [
-    6640, // Start of stage 0 'in'
-    4440, // Start of stage 1 'up' (6640 - 2200)
-    2340, // Start of stage 2 'out' (6640 - 4300)
-    0,    // End of stage 2
-  ];
+  useEffect(() => {
+    console.log(animationDisabledGloballyRef)
+    animationDisabledGloballyRef.current = animationDisabledGlobally;
+  }, [animationDisabledGlobally])
+  const stopPointsForward = /* isTabletOrMobile
+    ? [ 0, 1900, 3700, 5600 ]
+    : */ [
+      0,    // 0, Start of stage 0 'in'
+      2200,//1733, //2200, // 2000, Start of stage 1 'up'
+      4300,//3350, //6000, // Start of stage 2 'out'
+      6640//5200 //12000 // End of stage 2
+    ];
+
+  const stopPointsReverse = /* isTabletOrMobile
+  ? [ 6640, 0 ]
+  : */ [
+      6640,//5200, // Start of stage 0 'in'
+      4300,//3350, // Start of stage 1 'up' (6640 - 2200)
+      2200,//1733, // Start of stage 2 'out' (6640 - 4300)
+      0,    // End of stage 2
+    ];
 
   const totalStages = stopPointsForward.length;
 
@@ -57,6 +72,10 @@ const ScrollSequenceVideo = () => {
 
   const preventDefault = (e) => e.preventDefault();
 
+  /* 
+    Doesn't stop scrolling in mobile, so in case of overscroll we just
+    reseting animation and hiding text
+   */
   const disableScroll = () => {
     isAnimatingRef.current = true;
     window.addEventListener('wheel', preventDefault, { passive: false });
@@ -70,7 +89,6 @@ const ScrollSequenceVideo = () => {
   };
 
   const animate = (isScrollDown) => {
-    console.log(isScrollDown)
   
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
@@ -78,27 +96,20 @@ const ScrollSequenceVideo = () => {
 
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll();
+      toggleSkipAnimation('show');
 
       /* Go up or go down out of animation */
       if ((currentStageRef.current === 0 && !isScrollDown) ||
         (currentStageRef.current === totalStages - 1 && isScrollDown)) {
-          //console.log('go up and down')
-        setIsAnimTextVisible(() => {
-          isAnimTextVisibleRef.current = false
-          return false;
-        })
+          console.log('out of')
+          if (textStageRef.current >= 0 || textStage >= 0) {
+            textStageRef.current = -1
+            setTextStage(-1)
+            hideAllVisibleText()
+          }
         enableScroll()
         return;
       };
-
-      if (!isAnimTextVisibleRef.current) {
-        setIsAnimTextVisible(() => {
-          isAnimTextVisibleRef.current = true
-          return true;
-        })
-      }
-
-      //console.log('continue')
 
       const video = isScrollDown
         ? forwardVideoRef.current
@@ -107,8 +118,6 @@ const ScrollSequenceVideo = () => {
       const hiddenVideo = isScrollDown
         ? reverseVideoRef.current
         : forwardVideoRef.current;
-
-      console.log(forwardVideoRef.current.duration, reverseVideoRef.current.duration)
 
       if (isForwardRef.current !== isScrollDown) {
         setIsForward((prevIsForward) => {
@@ -136,13 +145,16 @@ const ScrollSequenceVideo = () => {
       const stopTimeoutTime = Math.abs(newStopPoint - currentStopPoint);
 
       // Adjust scroll to scollPoint of current stage
-      window.scrollTo({ top: scrollPoints[newStage] });
+      //if (!isTabletOrMobile) {
+        window.scrollTo({ top: scrollPoints[newStage] });
+      //}
 
       // START ANIMATION
       video.play();
 
+      
       let newTextStage = textStageRef.current
-
+      
       if (isScrollDown && currentStageRef.current !== textStageRef.current) {
         newTextStage = currentStageRef.current
       } else if (!isScrollDown && currentStageRef.current - 1 !== textStageRef.current) {
@@ -151,6 +163,8 @@ const ScrollSequenceVideo = () => {
 
       textStageRef.current = newTextStage;
       setTextStage(newTextStage)
+      makeTextVisible(newTextStage)
+
 
       // Milliseconds to seconds
 
@@ -159,19 +173,29 @@ const ScrollSequenceVideo = () => {
       currentStageRef.current = newStage;
 
       setTimeout(() => {
-        console.log('stop animation', stopTimeoutTime)
+        console.log(stopTimeoutTime)
         enableScroll();
         // STOP ANIMATION
-        video.pause();
+        /* if (!isTabletOrMobile) { */
+          video.pause();
+        /* } */
       }, stopTimeoutTime);
     } else {
-      //console.log('out animation', isAnimTextVisibleRef.current)
-      if (isAnimTextVisibleRef.current) {
-        setIsAnimTextVisible(false)
+      toggleSkipAnimation('hide');
+
+      if (textStageRef.current >= 0 || textStage >= 0) {
+        textStageRef.current = -1
+        setTextStage(-1)
+        hideAllVisibleText()
       }
 
-      if (currentScroll <= firstStageTopPoint && currentStageRef.current !== 0) {
+      const shouldResetUp = isTabletOrMobile
+        ? currentScroll <= firstStageTopPoint - window.innerHeight && currentStageRef.current !== 0
+        : currentScroll <= firstStageTopPoint && currentStageRef.current !== 0
+
+      if (shouldResetUp) {
        // Reseting to the first stage (when we skip animation UP)
+       console.log('reset up')
         currentStageRef.current = 0;
         forwardVideoRef.current.currentTime = stopPointsForward[0];
         setIsForward(true)
@@ -192,7 +216,10 @@ const ScrollSequenceVideo = () => {
 
   let prevScrollY = 0;
 
-  const handleScroll = throttle(() => {
+  const handleScroll = throttle((e) => {
+    /* disable to avoid trigerring animation when using navigation or scroll to top */
+    if (animationDisabledGloballyRef.current) return;
+
     const { scrollY } = window;
 
     if (prevScrollY === scrollY || isAnimatingRef.current) {
@@ -205,44 +232,44 @@ const ScrollSequenceVideo = () => {
     animate(isScrollDown);
 }, 200);
 
-useEffect(() => {
-  /* timer to wait for scroll to top when page is loaded */
-  const timeoutId = setTimeout(() => {
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("wheel", handleScroll);
-  }, 1000);
-
-  return () => {
-    clearTimeout(timeoutId); // Clear the timeout
-    window.removeEventListener("scroll", handleScroll);
-    window.removeEventListener("wheel", handleScroll);
-  };
-}, [scrollPoints]);
-
 
   useEffect(() => {
-    isAnimTextVisibleRef.current = isAnimTextVisible;
-  }, [isAnimTextVisible]);
+    /* timer to wait for scroll to top when page is loaded */
+    const timeoutId = setTimeout(() => {
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("wheel", handleScroll);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId); // Clear the timeout
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("wheel", handleScroll);
+    };
+  }, [scrollPoints]);
+
 
   return (
     <div className="png__sequence" ref={sectionRef}>
-      <SkipAnimation />
-      <AutoPlaySilentVideo
-        video={isTabletOrMobile ? videoForwardMob : videoForward}
-        videoRef={forwardVideoRef}
-        className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
-        poster={isTabletOrMobile ? posterForwardMob : posterForward}
-      />
-      <AutoPlaySilentVideo
-        video={isTabletOrMobile ? videoReverseMob : videoReverse}
-        videoRef={reverseVideoRef}
-        className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
-        poster={isTabletOrMobile ? posterReverseMob : posterReverse}
-      />
-      <ScrollSequenceText
-        isAnimTextVisible={isAnimTextVisible}
-        textStage={textStage}
-      />
+      {!isTabletOrMobile && (
+        <SkipAnimation />
+      )}
+      <div className='wrapper'>
+        <div className='wrapper-relative'>
+          <AutoPlaySilentVideo
+            video={isTabletOrMobileVertical ? videoForwardMob : videoForward}
+            videoRef={forwardVideoRef}
+            className={`png__sequence__video ${isForward ? 'visible' : 'hidden'}`}
+            poster={isTabletOrMobileVertical ? posterForwardMob : posterForward}
+          />
+          <AutoPlaySilentVideo
+            video={isTabletOrMobileVertical ? videoReverseMob : videoReverse}
+            videoRef={reverseVideoRef}
+            className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
+            poster={isTabletOrMobileVertical ? posterReverseMob : posterReverse}
+          />
+          <ScrollSequenceText />
+        </div>
+      </div>
     </div>
   );
 };

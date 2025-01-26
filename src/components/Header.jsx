@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { contactFormVisibleState, headerThemeState, animationTextVisibleState } from '../recoil/atoms';
+import { contactFormVisibleState, headerThemeState, animationDisabledState } from '../recoil/atoms';
 import ButtonCircle from '../components/ButtonCircle';
 import logoWhite from '../assets/images/logo-white.png';
 import logoBlack from '../assets/images/logo-black.png';
@@ -14,8 +14,8 @@ const Header = () => {
   const { pathname } = useLocation();
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
   const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
-  const [headerTheme, setHeaderTheme] = useRecoilState(headerThemeState);
-  const [isAnimTextVisible, setIsAnimTextVisible] = useRecoilState(animationTextVisibleState);
+  const [headerTheme] = useRecoilState(headerThemeState);
+  const [, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
 
   const handleClick = (elementId) => {
     if (mobileMenuIsVisible) {
@@ -30,12 +30,15 @@ const Header = () => {
         // Scroll to the element immediately
         const element = document.getElementById(elementId);
         if (element) {
+          /* disable animation to avoid trigerring it when using navigation or scroll to top */
+          setAnimationDisabledGlobally(true);
           window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+
+          /* enable animation after scroll */
+          setTimeout(() => {
+            setAnimationDisabledGlobally(false);
+          }, 500);
         }
-      }
-  
-      if (isAnimTextVisible) {
-        setIsAnimTextVisible(false);
       }
     }
   };  

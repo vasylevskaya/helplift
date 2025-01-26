@@ -5,22 +5,47 @@
   position: relative;
 }
 
-/* video */
-.png__sequence__video {
+@media (max-width: 700px) {
+  .png__sequence {
+    height: 450vh; /* a bit longer to reduce chances of overscroll */
+  }
+}
+
+.png__sequence .wrapper {
+  position: sticky;
   height: 100vh;
+  width: 100%;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
+  bottom: 0;
+}
+
+.png__sequence .wrapper-relative {
+  position: relative;
+  height: 100%;
   width: 100%;
-  /* position: absolute; */
-  position: sticky;
-  z-index: 1;
+}
+
+/* video */
+.png__sequence__video {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   object-fit: cover;
+  z-index: 1;
+}
+
+.png__sequence__video.hidden {
+  height: 0;
   opacity: 0;
 }
 
 .png__sequence__video.visible {
+  height: 100%;
   opacity: 1;
 }
 
@@ -33,29 +58,42 @@
 
 /* video */
 
-.skip-animation_btns {
-  z-index: 70;
-  display: flex;
-  gap: 10px;
-  position: sticky;
-  top: calc(100vh - 90px);
+.skip-animation_btns-wrapper {
+  position: fixed;
+  bottom: 30px;
   left: 50%;
+  transform: translateX(-50%);
+  z-index: 70;
+}
+
+/* Button styles */
+.skip-animation_btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: fit-content;
-  margin: 50px 0;
-  padding: 10px 0;
   color: black;
   border: none;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transform: translateX(-50%);
-  transition: 1000ms;
+  opacity: 0;
+}
+
+.skip-animation_btns.visible {
+  animation: textAppear 300ms;
+  animation-fill-mode: forwards;
+}
+
+.skip-animation_btns.hidden {
+  animation: textDisappear 300ms;
+  animation-fill-mode: forwards;
 }
 
 @media (max-width: 700px) {
   .skip-animation_btns {
-    top: calc(100vh - 70px);
+    bottom: 20px;
   }
 }
 
@@ -81,6 +119,7 @@
 .skip-animation_btns_text {
   width: min-content;
   text-align: center;
+  margin: 0;
 }
 
 .png__sequence__canvas {
@@ -96,14 +135,23 @@
 }
 
 .png__sequence__text_part {
-  position: fixed;
+  position: sticky;
+  /* position: absolute; */
   top: 150px;
   right: 30px;
   max-width: 320px;
   z-index: 40;
   transition: 300ms ease-in-out;
   opacity: 0;
+  margin-left: auto;
 }
+
+@media (min-width: 1200px) {
+  #text-stage-2 {
+    margin-top: -50%;
+  }
+}
+
 
 @media (max-width: 1200px) {
   .png__sequence__text_part {
@@ -114,40 +162,42 @@
 
 @media (max-width: 1100px) {
   .png__sequence__text_part {
-    bottom: 110px;
-    top: unset;
-    left: 150px;
+    top: calc(100vh - 250px);
+    left: 0;
+    margin-right: auto;
+    margin-left: 150px;
   }
 }
 
 @media (max-width: 950px) {
   .png__sequence__text_part {
-    left: 100px;
+    top: calc(100vh - 180px);
+    margin-left: 100px;
   }
 }
 
 @media (max-width: 850px) {
   .png__sequence__text_part {
-    left: 70px;
+    margin-left: 70px;
   }
 }
 
 @media (max-width: 700px) { 
   .png__sequence__text_part {
     max-width: unset;
-    left: 20px;
-    right: 70px;
+    margin-left: 20px;
+    margin-right: 70px;
   }
 }
 
-.png__sequence__text.visible .png__sequence__text_part.visible {
-  animation: textAppear 700ms;
+.png__sequence__text_part.visible {
+  animation: textAppear 300ms;
+  animation-delay: 300ms;
   animation-fill-mode: forwards;
 }
 
-.png__sequence__text.hidden .png__sequence__text_part,
-.png__sequence__text .png__sequence__text_part.hidden {
-  animation: textDisappear 700ms;
+.png__sequence__text_part.hidden {
+  animation: textDisappear 300ms;
   animation-fill-mode: forwards;
 }
 
@@ -160,7 +210,7 @@
 @media (max-width: 1200px) {
   .png__sequence__text_part p:first-of-type {
     font-size: 32px;
-    margin: 0 0 15px;
+    margin: 0 0 10px;
   }
 }
 
@@ -189,7 +239,7 @@
 
 @keyframes textAppear {
   0% {
-    transform: translateY(50vh);
+    transform: translateY(50px);
     opacity: 0;
   }
   100% {
@@ -201,10 +251,10 @@
 @keyframes textDisappear {
   0% {
     transform: translateY(0);
-    /* opacity: 1; */
+    opacity: 1;
   }
   100% {
-    transform: translateY(-50vh);
+    transform: translateY(-50px);
     opacity: 0;
   }
 }
@@ -425,6 +475,8 @@
     font-size: 30px;
     width: 100%;
     padding: 0;
+    color: rgb(38, 38, 38) !important;
+    /* to avoid changing color (when navigate through nav link) in mobile */
   }
 
   .header_contact {
