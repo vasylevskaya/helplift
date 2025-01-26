@@ -35,9 +35,10 @@ const ScrollSequenceVideo = () => {
   const sectionRef = useRef(null);
   const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
   const animationDisabledGloballyRef = useRef(animationDisabledGlobally);
+  const currentControllerRef = useRef(null);
+  const prevScrollRef = useRef(0);
 
   useEffect(() => {
-    console.log(animationDisabledGloballyRef)
     animationDisabledGloballyRef.current = animationDisabledGlobally;
   }, [animationDisabledGlobally])
   const stopPointsForward = /* isTabletOrMobile
@@ -70,32 +71,92 @@ const ScrollSequenceVideo = () => {
     });
   }, [sectionRef.current?.offsetHeight, sectionRef.current?.offsetTop]);
 
-  const preventDefault = (e) => e.preventDefault();
+  /* const preventDefault = (e) => e.preventDefault(); */
 
   /* 
     Doesn't stop scrolling in mobile, so in case of overscroll we just
     reseting animation and hiding text
    */
-  const disableScroll = () => {
+
+  /* const disableScroll = () => {
     isAnimatingRef.current = true;
-    window.addEventListener('wheel', preventDefault, { passive: false });
-    window.addEventListener('scroll', preventDefault, { passive: false });
+    document.body.addEventListener('wheel', preventDefault, { passive: false });
+    document.body.addEventListener('scroll', preventDefault, { passive: false });
   };
 
   const enableScroll = () => {
     isAnimatingRef.current = false;
-    window.removeEventListener('wheel', preventDefault, { passive: false });
-    window.removeEventListener('scroll', preventDefault, { passive: false });
-  };
+    document.body.removeEventListener('wheel', preventDefault, { passive: false });
+    document.body.removeEventListener('scroll', preventDefault, { passive: false });
+  }; */
+
+  const preventDefault = (e) => {
+    e = e || document.body.event;
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    e.returnValue = false;
+  }
+
+  function wheel(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
+
+  const scrollTo = (pointY) => {
+    //console.log('pointY', pointY)
+    document.body.scrollTo(0, pointY);
+  }
+
+  function disableScroll(scrollToY) {
+    isAnimatingRef.current = true;
+    setAnimationDisabledGlobally(true)
+
+    currentControllerRef.current = new AbortController();
+    const { signal } = currentControllerRef.current;
+
+    document.body.addEventListener('wheel', wheel, {signal, passive: false} );
+    document.body.addEventListener('mousewheel', wheel, {signal, passive: false} );
+    document.body.addEventListener('DOMMouseScroll', wheel, {signal, passive: false} );
+    document.body.addEventListener('touchmove', preventDefault, {signal, passive: false} );
+    document.addEventListener('mousewheel', wheel, {signal, passive: false} );
+    document.body.removeEventListener('scroll', handleScroll, {signal, passive: false} );
+
+    scrollTo(scrollToY);
+    prevScrollRef.current = scrollToY
+    document.body.addEventListener('scroll', () => scrollTo(prevScrollRef.current), {signal, passive: false} );
+  }
+
+  function enableScroll() {
+    
+    console.log('scroll enabled');
+    document.body.removeEventListener('wheel', wheel);
+    document.body.removeEventListener('mousewheel', wheel);
+    document.body.removeEventListener('DOMMouseScroll', wheel);
+    document.body.removeEventListener('touchmove', preventDefault);
+    if (currentControllerRef.current) {
+      currentControllerRef.current.abort();
+      currentControllerRef.current = null;
+      console.log('ABORTED')
+    }
+    document.body.addEventListener('scroll', handleScroll, {passive: false} );
+    setTimeout(() => {
+      isAnimatingRef.current = false;
+      setAnimationDisabledGlobally(false);
+    }, 500); /* timer is important to avoid scroll loop on IOS */
+  }
 
   const animate = (isScrollDown) => {
+    
+    console.log(isScrollDown, currentStageRef.current);
   
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
-    const currentScroll = window.scrollY;
+    const currentScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
-      disableScroll();
+      disableScroll(scrollPoints[currentStageRef.current]);
       toggleSkipAnimation('show');
 
       /* Go up or go down out of animation */
@@ -144,9 +205,11 @@ const ScrollSequenceVideo = () => {
 
       const stopTimeoutTime = Math.abs(newStopPoint - currentStopPoint);
 
-      // Adjust scroll to scollPoint of current stage
       //if (!isTabletOrMobile) {
-        window.scrollTo({ top: scrollPoints[newStage] });
+      // Adjust scroll to scollPoint of current stage
+      const newScrollPoint = scrollPoints[newStage]
+      scrollTo(newScrollPoint)
+      prevScrollRef.current = newScrollPoint;
       //}
 
       // START ANIMATION
@@ -169,16 +232,18 @@ const ScrollSequenceVideo = () => {
       // Milliseconds to seconds
 
       hiddenVideo.currentTime = newStopPointHiddenVideo / 1000;
+      console.log(hiddenVideo, hiddenVideo.currentTime, newStopPointHiddenVideo / 1000 )
 
       currentStageRef.current = newStage;
 
       setTimeout(() => {
-        console.log(stopTimeoutTime)
-        enableScroll();
+        //console.log(stopTimeoutTime)
+        
         // STOP ANIMATION
         /* if (!isTabletOrMobile) { */
           video.pause();
         /* } */
+        enableScroll();
       }, stopTimeoutTime);
     } else {
       toggleSkipAnimation('hide');
@@ -189,9 +254,9 @@ const ScrollSequenceVideo = () => {
         hideAllVisibleText()
       }
 
-      const shouldResetUp = isTabletOrMobile
-        ? currentScroll <= firstStageTopPoint - window.innerHeight && currentStageRef.current !== 0
-        : currentScroll <= firstStageTopPoint && currentStageRef.current !== 0
+      const shouldResetUp  = /* isTabletOrMobile
+        ? */ currentScroll <= firstStageTopPoint - window.innerHeight && currentStageRef.current !== 0
+        /* : currentScroll <= firstStageTopPoint && currentStageRef.current !== 0 */
 
       if (shouldResetUp) {
        // Reseting to the first stage (when we skip animation UP)
@@ -214,21 +279,22 @@ const ScrollSequenceVideo = () => {
     }
   }
 
-  let prevScrollY = 0;
 
   const handleScroll = throttle((e) => {
     /* disable to avoid trigerring animation when using navigation or scroll to top */
     if (animationDisabledGloballyRef.current) return;
-
-    const { scrollY } = window;
-
-    if (prevScrollY === scrollY || isAnimatingRef.current) {
-      prevScrollY = scrollY;
+    //console.log('handle scroll', animationDisabledGloballyRef.current)
+    
+    //console.log(prevScrollRef.current, Math.floor(prevScrollRef.current), document.body.scrollTop)
+    const scrollY = document.body.scrollTop;
+    const flooredPrevScroll = Math.floor(prevScrollRef.current);
+    if (flooredPrevScroll === scrollY || isAnimatingRef.current) {
+      prevScrollRef.current = scrollY;
       return
     };
-
-    const isScrollDown = prevScrollY < scrollY;
-    prevScrollY = scrollY;
+    
+    const isScrollDown = flooredPrevScroll < scrollY;
+    prevScrollRef.current = scrollY;
     animate(isScrollDown);
 }, 200);
 
@@ -236,14 +302,14 @@ const ScrollSequenceVideo = () => {
   useEffect(() => {
     /* timer to wait for scroll to top when page is loaded */
     const timeoutId = setTimeout(() => {
-      window.addEventListener("scroll", handleScroll);
-      window.addEventListener("wheel", handleScroll);
+      document.body.addEventListener("scroll", handleScroll, {passive: false});
+      document.body.addEventListener("wheel", handleScroll, {passive: false});
     }, 1000);
 
     return () => {
       clearTimeout(timeoutId); // Clear the timeout
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("wheel", handleScroll);
+      document.body.removeEventListener("scroll", handleScroll, {passive: false});
+      document.body.removeEventListener("wheel", handleScroll, {passive: false});
     };
   }, [scrollPoints]);
 

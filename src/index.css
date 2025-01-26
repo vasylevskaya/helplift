@@ -42,6 +42,21 @@ body {
   letter-spacing: 0.05rem;
 }
 
+/* START: prevent address bar to change size in Safari for smooth animation */
+html {
+  overflow: hidden;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* END prevent address bar to change size in Safari for smooth animation*/
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

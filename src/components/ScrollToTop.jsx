@@ -10,7 +10,7 @@ const ScrollToTop = () => {
     event.preventDefault();
     /* disable animation to avoid trigerring it when using navigation or scroll to top */
     setAnimationDisabledGlobally(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.body.scrollTo({ top: 0, behavior: "smooth" });
     
     /* enable animation after scroll */
     setTimeout(() => {

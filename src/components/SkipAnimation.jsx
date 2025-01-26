@@ -13,7 +13,7 @@ const SkipAnimation = () => {
       /* disable animation to avoid trigerring it when using navigation or scroll to top */
       setAnimationDisabledGlobally(true);
 
-      window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+      document.body.scrollTo({ top: element.offsetTop, behavior: "smooth" });
 
       /* enable animation after scroll */
       setTimeout(() => {

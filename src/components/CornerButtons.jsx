@@ -23,8 +23,9 @@ const CornerButtons = ({ className }) => {
     let section = document.querySelector(".corner-btns");
   
     if (section) {
-      window.addEventListener("scroll", function () {
-        setAreButtonsVisible(window.pageYOffset > offset)
+      document.body.addEventListener("scroll", function () {
+        const currentScroll = document.body.scrollTop || document.documentElement.scrollTop
+        setAreButtonsVisible(currentScroll > offset)
       });
     }
   };
