@@ -1,4 +1,5 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
+import Loader from "../components/Loader";
 
 export default function AutoPlaySilentVideo({
   video,
@@ -6,6 +7,7 @@ export default function AutoPlaySilentVideo({
   className,
   poster
 }) {
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => { /* Preload videos, especially important for IOS */
     // Ensure that videoRef.current is a valid DOM element
@@ -15,11 +17,12 @@ export default function AutoPlaySilentVideo({
   
       // Define the event handler
       const handleCanPlayThrough = () => {
-        console.log("Video is fully loaded and can play through.");
         videoElement.play();
         videoElement.pause();
         //videoElement.currentTime = 0;
         videoElement.removeEventListener("canplaythrough", handleCanPlayThrough);
+        console.log("Video is fully loaded and can play through.");
+        setIsLoading(false)
       };
   
       // Add the event listener only when the video element is available
@@ -35,16 +38,20 @@ export default function AutoPlaySilentVideo({
   }, []);
 
   return (
-    <video
-    onLoad={() => console.log('loaded')}
-      className={className}
-      ref={videoRef}
-      muted
-      playsInline
-      poster={poster}
-    >
-      <source src={video} type="video/mp4"/>
-      Your browser does not support the video tag.
-    </video>
+    <>
+      {isLoading && <Loader style={{ zIndex: 50 }}/>}
+      <video
+        onLoad={() => console.log('loaded')}
+        className={className}
+        ref={videoRef}
+        muted
+        playsInline
+        poster={poster}
+      >
+        <source src={video} type="video/mp4"/>
+        Your browser does not support the video tag.
+      </video>
+    </>
+    
   );
 }

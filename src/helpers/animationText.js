@@ -25,7 +25,7 @@ export const makeTextVisible = (textStage) => {
 };
 
 export const toggleSkipAnimation = (action) => {
-  const skipButtons = document.querySelector(
+  /* const skipButtons = document.querySelector(
     '.skip-animation_btns'
   );
 
@@ -39,5 +39,5 @@ export const toggleSkipAnimation = (action) => {
   if (action === 'hide') {
     skipButtons.classList.remove('visible')
     skipButtons.classList.add('hidden')
-  }
+  } */
 };

@@ -17,7 +17,7 @@ const HomePage = () => {
   const productsSectionRef = useRef(null);
 
   const toggleHeaderTheme = () => {
-    const currentScroll = window.scrollY;
+    const currentScroll = document.body.scrollTop;
 
     //console.log(currentScroll, animatedSectionRef.current.offsetTop, animatedSectionRef.current.offsetHeight)
 

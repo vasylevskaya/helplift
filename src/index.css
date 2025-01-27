@@ -57,6 +57,18 @@ body {
 
 /* END prevent address bar to change size in Safari for smooth animation*/
 
+/* Hide scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+} */
+
+/* Hide scrollbar for Webkit browsers */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

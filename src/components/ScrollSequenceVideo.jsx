@@ -14,7 +14,7 @@ import posterReverse from '../assets/images/poster-reverse.jpg';
 import posterForwardMob from '../assets/images/poster-original-mob.webp';
 import posterReverseMob from '../assets/images/poster-reverse-mob.webp';
 import ScrollSequenceText from './ScrollSequenceText';
-import { hideAllVisibleText, makeTextVisible, toggleSkipAnimation } from '../helpers/animationText';
+import { hideAllVisibleText, makeTextVisible } from '../helpers/animationText';
 
 
 const ScrollSequenceVideo = () => {
@@ -157,7 +157,6 @@ const ScrollSequenceVideo = () => {
 
     if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
       disableScroll(scrollPoints[currentStageRef.current]);
-      toggleSkipAnimation('show');
 
       /* Go up or go down out of animation */
       if ((currentStageRef.current === 0 && !isScrollDown) ||
@@ -246,8 +245,6 @@ const ScrollSequenceVideo = () => {
         enableScroll();
       }, stopTimeoutTime);
     } else {
-      toggleSkipAnimation('hide');
-
       if (textStageRef.current >= 0 || textStage >= 0) {
         textStageRef.current = -1
         setTextStage(-1)
@@ -316,9 +313,6 @@ const ScrollSequenceVideo = () => {
 
   return (
     <div className="png__sequence" ref={sectionRef}>
-      {!isTabletOrMobile && (
-        <SkipAnimation />
-      )}
       <div className='wrapper'>
         <div className='wrapper-relative'>
           <AutoPlaySilentVideo
@@ -333,6 +327,7 @@ const ScrollSequenceVideo = () => {
             className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
             poster={isTabletOrMobileVertical ? posterReverseMob : posterReverse}
           />
+          <SkipAnimation />
           <ScrollSequenceText />
         </div>
       </div>

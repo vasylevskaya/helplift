@@ -59,14 +59,17 @@
 /* video */
 
 .skip-animation_btns-wrapper {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: sticky;
   z-index: 70;
+  top: calc(100% - 95px);
 }
 
-/* Button styles */
+@media (max-width: 700px) {
+  .skip-animation_btns-wrapper {
+    top: calc(100% - 75px); /* don't forget to align corner buttons */
+  }
+}
+
 .skip-animation_btns {
   display: flex;
   align-items: center;
@@ -78,23 +81,8 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0;
-}
-
-.skip-animation_btns.visible {
-  animation: textAppear 300ms;
-  animation-fill-mode: forwards;
-}
-
-.skip-animation_btns.hidden {
-  animation: textDisappear 300ms;
-  animation-fill-mode: forwards;
-}
-
-@media (max-width: 700px) {
-  .skip-animation_btns {
-    bottom: 20px;
-  }
+  margin: auto;
+  padding: 20px 0;
 }
 
 .skip-animation_btns_btn {
@@ -144,9 +132,11 @@
   transition: 300ms ease-in-out;
   opacity: 0;
   margin-left: auto;
+  padding: 20px 0;
 }
 
 @media (min-width: 1200px) {
+  #text-stage-1,
   #text-stage-2 {
     margin-top: -50%;
   }
@@ -162,7 +152,7 @@
 
 @media (max-width: 1100px) {
   .png__sequence__text_part {
-    top: calc(100vh - 250px);
+    top: calc(100% - 270px);
     left: 0;
     margin-right: auto;
     margin-left: 150px;
@@ -171,7 +161,6 @@
 
 @media (max-width: 950px) {
   .png__sequence__text_part {
-    top: calc(100vh - 180px);
     margin-left: 100px;
   }
 }
@@ -184,6 +173,7 @@
 
 @media (max-width: 700px) { 
   .png__sequence__text_part {
+    top: calc(100% - 180px);
     max-width: unset;
     margin-left: 20px;
     margin-right: 70px;
@@ -216,7 +206,7 @@
 
 @media (max-width: 700px) { 
   .png__sequence__text_part p:first-of-type {
-    font-size: 26px;
+    font-size: 22px;
   }
 }
 
@@ -233,7 +223,7 @@
 
 @media (max-width: 700px) { 
   .png__sequence__text_part p:nth-of-type(2) {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -635,6 +625,7 @@
 .footer_contacts_item p {
   font-size: 14px;
   margin: 10px 0 0;
+  text-decoration: none;
 }
 
 .footer_logo {
@@ -1338,7 +1329,7 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
 
 @media (max-width: 700px), (max-height: 700px) {
   .corner-btns {
-    bottom: 20px;
+    bottom: 10px; /* don't forget to align skip animation */
     right: 20px;
   }
 }
