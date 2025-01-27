@@ -1,13 +1,13 @@
 /* Start General styles */
 .png__sequence {
   width: 100%;
-  height: 350vh;
+  height: 1200vh;
   position: relative;
 }
 
 @media (max-width: 700px) {
   .png__sequence {
-    height: 450vh; /* a bit longer to reduce chances of overscroll */
+    height: 600vh; /* a bit longer to reduce chances of overscroll */
   }
 }
 
