@@ -135,7 +135,7 @@
   padding: 20px 0;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 700px) {
   #text-stage-1,
   #text-stage-2 {
     margin-top: -50%;
@@ -456,6 +456,14 @@
   transition: 200ms;
   background-color: transparent;
   border: none;
+}
+
+.header_nav_link.disabled {
+  cursor: default;
+}
+
+.header_nav_link.disabled .location-dot {
+  display: none;
 }
 
 @media (max-width: 641px) {
@@ -1414,7 +1422,7 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
 
 .corner-btns_btn--telegram:hover,
 .corner-btns_btn--viber:hover,
-.progress-wrap:hover {
+.progress-wrap:not(.disabled):hover {
   background-color: #c9c9c9ba;
 }
 
@@ -1426,13 +1434,18 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
   display: block;
   border-radius: 50px;
   z-index: 100;
-  -webkit-transition: all 400ms linear;
-  -o-transition: all 400ms linear;
-  transition: all 400ms linear;
+  -webkit-transition: all 400ms linear, opacity 200ms linear;
+  -o-transition: all 400ms linear, opacity 200ms linear;
+  transition: all 400ms linear, opacity 200ms linear;
   box-sizing: border-box;
   position: relative;
   padding: 0;
   border: none;
+}
+
+.progress-wrap.disabled {
+  cursor: default;
+  opacity: 0.3;
 }
 
 .progress-wrap::after {
@@ -1449,7 +1462,6 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
   top: 50%;
   height: 20px;
   width: 20px;
-  cursor: pointer;
   display: block;
   z-index: 1;
   -webkit-transition: all 400ms linear;

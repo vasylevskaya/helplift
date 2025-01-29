@@ -20,7 +20,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     setHeaderTheme('light');
-    window.scrollTo(0, 0);
+    //document.body.scrollTo(0, 0); no need for now cause product card has its own
   }, [])
 
   return (

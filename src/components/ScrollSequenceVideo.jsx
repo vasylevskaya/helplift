@@ -18,46 +18,47 @@ import { hideAllVisibleText, makeTextVisible } from '../helpers/animationText';
 
 
 const ScrollSequenceVideo = () => {
-  const isTabletOrMobile = useMediaQuery({
+  /* const isTabletOrMobile = useMediaQuery({
     query: "(max-width: 700px) and (orientation: portrait), (max-height: 700px) and (orientation: landscape)"
-  });
+  }); */
   const isTabletOrMobileVertical = useMediaQuery({
     query: "(max-width: 700px) and (orientation: portrait)"
   });
+
+  /* repeated states: refs - for functions, state - for layout */
   const [isForward, setIsForward] = useState(true);
   const isForwardRef = useRef(isForward);
   const [textStage, setTextStage] = useState(-1); // -1 - 2
   const textStageRef = useRef(textStage);
+  const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
+  const animationDisabledGloballyRef = useRef(animationDisabledGlobally);
+
+  /* other refs */
   const currentStageRef = useRef(0);
   const isAnimatingRef = useRef(false);
   const forwardVideoRef = useRef(null);
   const reverseVideoRef = useRef(null);
   const sectionRef = useRef(null);
-  const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
-  const animationDisabledGloballyRef = useRef(animationDisabledGlobally);
   const currentControllerRef = useRef(null);
   const prevScrollRef = useRef(0);
 
   useEffect(() => {
     animationDisabledGloballyRef.current = animationDisabledGlobally;
   }, [animationDisabledGlobally])
-  const stopPointsForward = /* isTabletOrMobile
-    ? [ 0, 1900, 3700, 5600 ]
-    : */ [
-      0,    // 0, Start of stage 0 'in'
-      2200,//1733, //2200, // 2000, Start of stage 1 'up'
-      4300,//3350, //6000, // Start of stage 2 'out'
-      6640//5200 //12000 // End of stage 2
-    ];
 
-  const stopPointsReverse = /* isTabletOrMobile
-  ? [ 6640, 0 ]
-  : */ [
-      6640,//5200, // Start of stage 0 'in'
-      4300,//3350, // Start of stage 1 'up' (6640 - 2200)
-      2200,//1733, // Start of stage 2 'out' (6640 - 4300)
-      0,    // End of stage 2
-    ];
+  const stopPointsForward = [
+    0,    // Start of stage 0 'in'
+    2200, // Start of stage 1 'up'
+    4300, // Start of stage 2 'out'
+    6640 // End of stage 2
+  ];
+
+  const stopPointsReverse =  [
+    6640, // Start of stage 0 'in'
+    4300, // Start of stage 1 'up'
+    2200, // Start of stage 2 'out'
+    0,    // End of stage 2
+  ];
 
   const totalStages = stopPointsForward.length;
 
@@ -70,25 +71,6 @@ const ScrollSequenceVideo = () => {
       return sectionTop + index * stageHeight;
     });
   }, [sectionRef.current?.offsetHeight, sectionRef.current?.offsetTop]);
-
-  /* const preventDefault = (e) => e.preventDefault(); */
-
-  /* 
-    Doesn't stop scrolling in mobile, so in case of overscroll we just
-    reseting animation and hiding text
-   */
-
-  /* const disableScroll = () => {
-    isAnimatingRef.current = true;
-    document.body.addEventListener('wheel', preventDefault, { passive: false });
-    document.body.addEventListener('scroll', preventDefault, { passive: false });
-  };
-
-  const enableScroll = () => {
-    isAnimatingRef.current = false;
-    document.body.removeEventListener('wheel', preventDefault, { passive: false });
-    document.body.removeEventListener('scroll', preventDefault, { passive: false });
-  }; */
 
   const preventDefault = (e) => {
     e = e || document.body.event;
@@ -105,7 +87,6 @@ const ScrollSequenceVideo = () => {
   }
 
   const scrollTo = (pointY) => {
-    //console.log('pointY', pointY)
     document.body.scrollTo(0, pointY);
   }
 
@@ -236,12 +217,8 @@ const ScrollSequenceVideo = () => {
       currentStageRef.current = newStage;
 
       setTimeout(() => {
-        //console.log(stopTimeoutTime)
-        
         // STOP ANIMATION
-        /* if (!isTabletOrMobile) { */
-          video.pause();
-        /* } */
+        video.pause();
         enableScroll();
       }, stopTimeoutTime);
     } else {
@@ -280,9 +257,7 @@ const ScrollSequenceVideo = () => {
   const handleScroll = throttle((e) => {
     /* disable to avoid trigerring animation when using navigation or scroll to top */
     if (animationDisabledGloballyRef.current) return;
-    //console.log('handle scroll', animationDisabledGloballyRef.current)
-    
-    //console.log(prevScrollRef.current, Math.floor(prevScrollRef.current), document.body.scrollTop)
+
     const scrollY = document.body.scrollTop;
     const flooredPrevScroll = Math.floor(prevScrollRef.current);
     if (flooredPrevScroll === scrollY || isAnimatingRef.current) {
@@ -294,7 +269,6 @@ const ScrollSequenceVideo = () => {
     prevScrollRef.current = scrollY;
     animate(isScrollDown);
 }, 200);
-
 
   useEffect(() => {
     /* timer to wait for scroll to top when page is loaded */
@@ -327,7 +301,7 @@ const ScrollSequenceVideo = () => {
             className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
             poster={isTabletOrMobileVertical ? posterReverseMob : posterReverse}
           />
-          <SkipAnimation />
+          <SkipAnimation enableScroll={enableScroll} />
           <ScrollSequenceText />
         </div>
       </div>

@@ -15,7 +15,7 @@ const Header = () => {
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
   const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
   const [headerTheme] = useRecoilState(headerThemeState);
-  const [, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
+  const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
 
   const handleClick = (elementId) => {
     if (mobileMenuIsVisible) {
@@ -73,14 +73,14 @@ const Header = () => {
             </ButtonGradient>
           </button>
           <button
-            className='header_nav_link'
+            className={`header_nav_link ${animationDisabledGlobally ? 'disabled' : ''}`}
             onClick={() => handleClick('section-about-us')}
           >
             {'Про нас'}
             <div className='location-dot' />
           </button>
           <button
-            className='header_nav_link'
+            className={`header_nav_link ${animationDisabledGlobally ? 'disabled' : ''}`}
             onClick={() => handleClick('section-products')}
           >
             {'Підйомники'}

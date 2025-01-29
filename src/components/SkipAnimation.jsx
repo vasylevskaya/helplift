@@ -3,13 +3,14 @@ import { hideAllVisibleText } from "../helpers/animationText";
 import { useRecoilState } from 'recoil';
 import { animationDisabledState } from '../recoil/atoms';
 
-const SkipAnimation = () => {
+const SkipAnimation = ({ enableScroll }) => {
    const [, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
   
 
   const skipAnimation = (elementId) => { /* move to about us (up) / products (down) section */
     const element = document.getElementById(elementId);
     if (element) {
+      enableScroll()
       /* disable animation to avoid trigerring it when using navigation or scroll to top */
       setAnimationDisabledGlobally(true);
 

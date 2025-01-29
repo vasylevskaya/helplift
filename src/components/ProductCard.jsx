@@ -26,7 +26,7 @@ const ProductCard = ({
     <Link
       className='product-card-link'
       to={ROUTES.product_page.replace(':id', product.id)}
-      onClick={() =>  window.scrollTo(0, 0)}
+      onClick={() =>  document.body.scrollTo(0, 0)}
     >
       <div
         key={product.id}
@@ -41,6 +41,7 @@ const ProductCard = ({
           className='product-card_img'
           src={image ?? imgPlaceholder}
           alt={product.name}
+          loading='lazy'
         />
         <ButtonCircle
           backgroundColor='transparent'
