@@ -19,8 +19,6 @@ const HomePage = () => {
   const toggleHeaderTheme = () => {
     const currentScroll = document.body.scrollTop;
 
-    //console.log(currentScroll, animatedSectionRef.current.offsetTop, animatedSectionRef.current.offsetHeight)
-
     if (headerTheme === 'dark') {
       if ((currentScroll >= aboutUsSectionRef.current.offsetTop 
         && currentScroll < aboutUsSectionRef.current.offsetTop + aboutUsSectionRef.current.offsetHeight)
@@ -42,12 +40,12 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    window.addEventListener("scroll", toggleHeaderTheme);
-    window.addEventListener("wheel", toggleHeaderTheme);
+    document.body.addEventListener("scroll", toggleHeaderTheme);
+    document.body.addEventListener("wheel", toggleHeaderTheme);
 
     return () => {
-      window.removeEventListener("scroll", toggleHeaderTheme);
-      window.removeEventListener("wheel", toggleHeaderTheme);
+      document.body.removeEventListener("scroll", toggleHeaderTheme);
+      document.body.removeEventListener("wheel", toggleHeaderTheme);
     };
   }, [toggleHeaderTheme]);
 

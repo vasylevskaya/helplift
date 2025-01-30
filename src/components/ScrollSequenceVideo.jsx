@@ -28,7 +28,7 @@ const ScrollSequenceVideo = () => {
   /* repeated states: refs - for functions, state - for layout */
   const [isForward, setIsForward] = useState(true);
   const isForwardRef = useRef(isForward);
-  const [textStage, setTextStage] = useState(-1); // -1 - 2
+  const [textStage, setTextStage] = useState(-1); // from -1 to 2
   const textStageRef = useRef(textStage);
   const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
   const animationDisabledGloballyRef = useRef(animationDisabledGlobally);
@@ -66,7 +66,9 @@ const ScrollSequenceVideo = () => {
     if (!sectionRef.current) return [];
     const sectionHeight = sectionRef.current.offsetHeight;
     const sectionTop = sectionRef.current.offsetTop;
-    const stageHeight = (sectionHeight - window.innerHeight / 2) / (totalStages);
+    //const stageHeight = (sectionHeight - window.innerHeight) / (totalStages);
+    const stageHeight = (sectionHeight - window.innerHeight ) / (totalStages - 1);
+
     return Array.from({ length: totalStages }, (_, index) => {
       return sectionTop + index * stageHeight;
     });
@@ -110,8 +112,6 @@ const ScrollSequenceVideo = () => {
   }
 
   function enableScroll() {
-    
-    console.log('scroll enabled');
     document.body.removeEventListener('wheel', wheel);
     document.body.removeEventListener('mousewheel', wheel);
     document.body.removeEventListener('DOMMouseScroll', wheel);
@@ -119,7 +119,6 @@ const ScrollSequenceVideo = () => {
     if (currentControllerRef.current) {
       currentControllerRef.current.abort();
       currentControllerRef.current = null;
-      console.log('ABORTED')
     }
     document.body.addEventListener('scroll', handleScroll, {passive: false} );
     setTimeout(() => {
@@ -128,21 +127,26 @@ const ScrollSequenceVideo = () => {
     }, 500); /* timer is important to avoid scroll loop on IOS */
   }
 
+  const stopAnimation = (video) => {
+    video.pause();
+    enableScroll();
+  }
+
   const animate = (isScrollDown) => {
-    
-    console.log(isScrollDown, currentStageRef.current);
-  
     const firstStageTopPoint = scrollPoints[0];
     const lastStageTopPoint = scrollPoints[totalStages - 1];
     const currentScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
-    if (currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint) {
+    const inSection = currentScroll >= firstStageTopPoint && currentScroll <= lastStageTopPoint
+    if (inSection) {
       disableScroll(scrollPoints[currentStageRef.current]);
 
       /* Go up or go down out of animation */
-      if ((currentStageRef.current === 0 && !isScrollDown) ||
-        (currentStageRef.current === totalStages - 1 && isScrollDown)) {
-          console.log('out of')
+      const outOfAnimationUp = currentStageRef.current === 0 && !isScrollDown;
+      const outOfAnimationDown = currentStageRef.current === totalStages - 1 && isScrollDown;
+
+      if (outOfAnimationUp || outOfAnimationDown) {
+          /* Hide text if not hidden */
           if (textStageRef.current >= 0 || textStage >= 0) {
             textStageRef.current = -1
             setTextStage(-1)
@@ -160,6 +164,7 @@ const ScrollSequenceVideo = () => {
         ? reverseVideoRef.current
         : forwardVideoRef.current;
 
+      /* set correct direction if needed */
       if (isForwardRef.current !== isScrollDown) {
         setIsForward((prevIsForward) => {
           isForwardRef.current = !prevIsForward;
@@ -185,17 +190,14 @@ const ScrollSequenceVideo = () => {
 
       const stopTimeoutTime = Math.abs(newStopPoint - currentStopPoint);
 
-      //if (!isTabletOrMobile) {
       // Adjust scroll to scollPoint of current stage
       const newScrollPoint = scrollPoints[newStage]
       scrollTo(newScrollPoint)
       prevScrollRef.current = newScrollPoint;
-      //}
 
       // START ANIMATION
       video.play();
 
-      
       let newTextStage = textStageRef.current
       
       if (isScrollDown && currentStageRef.current !== textStageRef.current) {
@@ -210,16 +212,11 @@ const ScrollSequenceVideo = () => {
 
 
       // Milliseconds to seconds
-
       hiddenVideo.currentTime = newStopPointHiddenVideo / 1000;
-      console.log(hiddenVideo, hiddenVideo.currentTime, newStopPointHiddenVideo / 1000 )
-
       currentStageRef.current = newStage;
 
       setTimeout(() => {
-        // STOP ANIMATION
-        video.pause();
-        enableScroll();
+        stopAnimation(video)
       }, stopTimeoutTime);
     } else {
       if (textStageRef.current >= 0 || textStage >= 0) {
@@ -234,7 +231,6 @@ const ScrollSequenceVideo = () => {
 
       if (shouldResetUp) {
        // Reseting to the first stage (when we skip animation UP)
-       console.log('reset up')
         currentStageRef.current = 0;
         forwardVideoRef.current.currentTime = stopPointsForward[0];
         setIsForward(true)
@@ -256,11 +252,12 @@ const ScrollSequenceVideo = () => {
 
   const handleScroll = throttle((e) => {
     /* disable to avoid trigerring animation when using navigation or scroll to top */
-    if (animationDisabledGloballyRef.current) return;
+    //if (animationDisabledGloballyRef.current) return;
 
     const scrollY = document.body.scrollTop;
+   
     const flooredPrevScroll = Math.floor(prevScrollRef.current);
-    if (flooredPrevScroll === scrollY || isAnimatingRef.current) {
+    if (flooredPrevScroll === scrollY || isAnimatingRef.current || animationDisabledGloballyRef.current) {
       prevScrollRef.current = scrollY;
       return
     };
@@ -301,7 +298,7 @@ const ScrollSequenceVideo = () => {
             className={`png__sequence__video ${isForward ? 'hidden' : 'visible'}`}
             poster={isTabletOrMobileVertical ? posterReverseMob : posterReverse}
           />
-          <SkipAnimation enableScroll={enableScroll} />
+          <SkipAnimation stopAnimation={stopAnimation} />
           <ScrollSequenceText />
         </div>
       </div>

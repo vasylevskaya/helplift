@@ -21,7 +21,7 @@ export default function AutoPlaySilentVideo({
         videoElement.pause();
         //videoElement.currentTime = 0;
         videoElement.removeEventListener("canplaythrough", handleCanPlayThrough);
-        console.log("Video is fully loaded and can play through.");
+        //console.log("Video is fully loaded and can play through.");
         setIsLoading(false)
       };
   
@@ -41,7 +41,6 @@ export default function AutoPlaySilentVideo({
     <>
       {isLoading && <Loader style={{ zIndex: 50 }}/>}
       <video
-        onLoad={() => console.log('loaded')}
         className={className}
         ref={videoRef}
         muted
