@@ -14,7 +14,7 @@ const Header = () => {
   const { pathname } = useLocation();
   const [mobileMenuIsVisible, setMobileMenuIsVisible] = useState(false);
   const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
-  const [headerTheme, setHeaderTheme] = useRecoilState(headerThemeState);
+  const [headerTheme] = useRecoilState(headerThemeState);
   const [animationDisabledGlobally, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
 
   const handleClick = (elementId) => {
@@ -36,10 +36,6 @@ const Header = () => {
 
           /* enable animation after scroll */
           setTimeout(() => {
-            /* for about us and products sections */
-            if (headerTheme !== 'light') {
-              setHeaderTheme('light')
-            }
             setAnimationDisabledGlobally(false);
           }, 500);
         }
