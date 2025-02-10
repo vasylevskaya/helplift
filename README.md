@@ -23,6 +23,10 @@ npm start
   /text-content.json       # Texts for localization (future use)  
   /contact-form            # JSON for rendering the contact form  
   /components              # Reusable UI components  
+  /helpers
+    animationText.js       # helper functions to manage animation
+  /hooks
+    AutoPlaySilentVideo.jsx # Preload the video
   /pages                   # Page-specific components  
   /recoil  
     atoms.js               # Atoms for state management  
@@ -38,6 +42,6 @@ npm run deploy
 Animated section with a video that plays forward and reverse based on scroll direction.
 
 Steps to update the video:
-- Replace videoForward and videoReverse files with the new video files.
+- Replace videoForward and videoReverse (mob and desktop) files with the new video files.
 - Adjust stopPointsForward and stopPointsReverse to align with the phases of the animation.
 - Test thoroughly to ensure the animation works as expected.

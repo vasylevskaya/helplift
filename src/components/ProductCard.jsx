@@ -26,7 +26,7 @@ const ProductCard = ({
     <Link
       className='product-card-link'
       to={ROUTES.product_page.replace(':id', product.id)}
-      onClick={() =>  document.body.scrollTo(0, 0)}
+      onClick={() => document.body.scrollTo(0, 0)}
     >
       <div
         key={product.id}

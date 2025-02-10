@@ -6,7 +6,7 @@ import AboutUsSection from '../components/AboutUsSection';
 import AnimatedSection from '../components/AnimatedSection';
 import ProductsSection from '../components/ProductsSection';
 import ImageTextSection from '../components/ImageTextSection';
-import { headerThemeState } from '../recoil/atoms';
+import { headerThemeState, animationDisabledState } from '../recoil/atoms';
 
 const HomePage = () => {
   const location = useLocation();
@@ -15,6 +15,7 @@ const HomePage = () => {
   const aboutUsSectionRef = useRef(null);
   const animatedSectionRef = useRef(null);
   const productsSectionRef = useRef(null);
+  const [, setAnimationDisabledGlobally] = useRecoilState(animationDisabledState);
 
   const toggleHeaderTheme = () => {
     const currentScroll = document.body.scrollTop;
@@ -56,7 +57,13 @@ const HomePage = () => {
       const scrollToElement = () => {
         const element = document.getElementById(elementId);
         if (element) {
-          window.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+          /* disable animation to avoid trigerring it when using navigation or scroll to top */
+          setAnimationDisabledGlobally(true);
+          document.body.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+          /* enable animation after scroll */
+          setTimeout(() => {
+            setAnimationDisabledGlobally(false);
+          }, 500);
         }
       };
   

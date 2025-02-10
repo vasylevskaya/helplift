@@ -20,7 +20,9 @@ const ProductPage = () => {
 
   useEffect(() => {
     setHeaderTheme('light');
-    //document.body.scrollTo(0, 0); no need for now cause product card has its own
+    document.body.scrollTo(0, 0); // no need for now cause product card has its own
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
