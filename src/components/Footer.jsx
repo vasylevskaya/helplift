@@ -55,7 +55,7 @@ const Footer = () => {
         <p className='footer_bottom_text'>
           @
           <span className='font-grotesque'>
-            {`2024 `}
+            {`2025 `}
           </span>
           Helplift. All rights reserved
         </p>

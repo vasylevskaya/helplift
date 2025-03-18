@@ -82,9 +82,16 @@ const Header = () => {
           </button>
           <button
             className={`header_nav_link ${animationDisabledGlobally ? 'disabled' : ''}`}
-            onClick={() => handleClick('section-products')}
+            onClick={() => handleClick('products-lifts')}
           >
             {'Підйомники'}
+            <div className='location-dot' />
+          </button>
+          <button
+            className={`header_nav_link ${animationDisabledGlobally ? 'disabled' : ''}`}
+            onClick={() => handleClick('products-lighting')}
+          >
+            {'Освітлення'}
             <div className='location-dot' />
           </button>
           <hr id="nav-input-line" className='input-line' />

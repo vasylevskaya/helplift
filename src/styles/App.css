@@ -1151,10 +1151,24 @@ add 'btn-circle-parent' or 'btn-circle-sibling' classNames */
   scroll-snap-align: start;
 }
 
+/* - 20px to align because this section only has 2 cards*/
+#products-lighting .product-card-placeholder {
+  width: calc(16.6% + 55px - 20px);
+  min-width: calc(16.6% + 55px - 20px);
+}
+
 @media (max-width: 900px) {
-  .product-card-placeholder {
+  .product-card-placeholder,
+  #products-lighting .product-card-placeholder {
     min-width: 1px;
     width: 1px;
+  }
+}
+
+/* - 20px to align because this section only has 2 cards */
+@media (min-width: 641px) and (max-width: 900px) {
+  #section-products-2 .product-card-placeholder {
+    margin-right: -20px;
   }
 }
 

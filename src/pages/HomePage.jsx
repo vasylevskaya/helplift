@@ -87,7 +87,14 @@ const HomePage = () => {
         <AnimatedSection />
       </div>
       <div ref={productsSectionRef}>
-        <ProductsSection />
+        <ProductsSection
+          title="Підйомники"
+          productsSectionId="products-lifts"
+        />
+        <ProductsSection
+          title="Освітлення"
+          productsSectionId="products-lighting"
+        />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
+import LiftProductPage from './pages/LiftProductPage';
+import LightingProductPage from './pages/LightingProductPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import ContactForm from './components/ContactForm';
 import ROUTES from './assets/routes.json';
@@ -21,7 +22,8 @@ const App = () => {
       <HashRouter>
         <Header />
         <Routes>
-          <Route exact path={ROUTES.product_page} element={<ProductPage />} />
+          <Route exact path={ROUTES.product_lifts_page} element={<LiftProductPage />} />
+          <Route exact path={ROUTES.product_lighting_page} element={<LightingProductPage />} />
           <Route exact path={ROUTES.privacy_policy_page} element={<PrivacyPolicyPage />} />
           <Route path={ROUTES.home_page} element={<HomePage />} />
           <Route path={'*'} element={<HomePage />} />

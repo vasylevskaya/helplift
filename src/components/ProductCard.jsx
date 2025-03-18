@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import ButtonCircle from './ButtonCircle';
-import ROUTES from '../assets/routes.json';
 import { Link } from 'react-router-dom';
 import imgPlaceholder from '../assets/images/img-placeholder.webp';
 
 const ProductCard = ({
   product,
+  route,
   isProductPage /* optional */
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -25,7 +25,7 @@ const ProductCard = ({
   return (
     <Link
       className='product-card-link'
-      to={ROUTES.product_page.replace(':id', product.id)}
+      to={route.replace(':id', product.id)}
       onClick={() => document.body.scrollTo(0, 0)}
     >
       <div

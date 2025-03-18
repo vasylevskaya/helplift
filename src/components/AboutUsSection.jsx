@@ -14,6 +14,12 @@ const AboutUsSection = () => {
         <p className='section-about-us_content_text'>
           {t['about-us']['text-2']}
         </p>
+        <p className='section-about-us_content_text'>
+          {t['about-us']['text-3']}
+        </p>
+        <p className='section-about-us_content_text'>
+          {t['about-us']['text-4']}
+        </p>
       </div>
     </div>
   );

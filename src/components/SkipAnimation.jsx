@@ -41,7 +41,7 @@ const SkipAnimation = () => {
         </p>
         <button
           className={`skip-animation_btns_btn btn-down ${animationDisabledGlobally ? 'disabled' : ''}`}
-          onClick={() => skipAnimation('section-products')}
+          onClick={() => skipAnimation('products-lifts')}
         >
           <ButtonCircle
             backgroundColor="#9f9f9fad"

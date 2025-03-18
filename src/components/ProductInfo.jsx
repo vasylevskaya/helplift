@@ -4,12 +4,15 @@ import ButtonCircle from '../components/ButtonCircle';
 import { contactFormVisibleState } from '../recoil/atoms';
 import checkIcon from '../assets/images/check.svg';
 import t from '../assets/text-content.json';
-import ProductInfoCharacteristics from './ProductInfoCharacteristics';
+import LiftsCharacteristics from './LiftsCharacteristics';
+import LightingCharacteristics from './LightingCharacteristics';
 
 const ProductInfo = ({
   productName,
   productPrice,
-  productToOrder
+  productToOrder,
+  isLift, /* optional */
+  isLighting /* optional */
 }) => {
   const [, setContactFormIsVisible] = useRecoilState(contactFormVisibleState);
 
@@ -18,7 +21,7 @@ const ProductInfo = ({
       <h2 className='product-name'>{productName}</h2>
       <div className='product-price-wrapper'>
         <p className='product-price'>
-          від <span className='font-grotesque'>45 000</span> ₴
+          від <span className='font-grotesque'>{productPrice}</span> ₴
         </p>
         {productToOrder && (
           <div className='product-to-order'>
@@ -32,7 +35,8 @@ const ProductInfo = ({
         )}
       </div>
       <hr className='input-line input-line--top' />
-      <ProductInfoCharacteristics />
+      {isLift && <LiftsCharacteristics />}
+      {isLighting && <LightingCharacteristics />}
       <hr className='input-line input-line--bottom' />
       <button
         className='btn-order'

@@ -52,10 +52,6 @@ const ImageTextSection = () => {
         <p className="section-image-text_content_subtitle">
           для людей з інвалідністю
         </p>
-        <p className="section-image-text_content_text">
-          Якість, надійність та підтримка<br />
-          від українського виробника.
-        </p>
       </div>
     </div>
   );

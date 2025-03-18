@@ -5,13 +5,14 @@ import { headerThemeState } from '../recoil/atoms';
 import '../styles/ProductPage.css';
 import Header from '../components/Header';
 import ProductImagesCarousel from '../components/ProductImagesCarousel';
-import products from '../assets/products.json';
-import ProductDescriptionTabs from '../components/ProductDescriptionTabs';
-import ProductCarousel from '../components/ProductsCarousel';
+import LightingDescription from '../components/LightingDescription';
+import ProductsCarousel from '../components/ProductsCarousel';
 import ProductInfo from '../components/ProductInfo';
 import ProductShippingInfo from '../components/ProductShippingInfo';
+import products from '../assets/products-lighting.json'; /* !! get images from public folder !! */
 
-const ProductPage = () => {
+
+const LightingProductPage = () => {
   const { id } = useParams()
   const product = products.find(product => (
     product.id.toString() === id
@@ -39,24 +40,30 @@ const ProductPage = () => {
               productName={product.name}
               productPrice={product.price}
               productToOrder={product.to_order}
+              isLighting={true}
             />
           </div>
           <div className='section-secondary'>
-            <ProductDescriptionTabs product={product} />
+            <LightingDescription productDescription={product.description} />
             <ProductShippingInfo />
           </div>
           <p className='finish-text'>
             {'З радістю прорахуємо та виконаємо індивідуальне замовлення під вас.'}
           </p>
           <h3 className='product-carousel-title'>
-            {'Інші підйомники'}
+            {'Інше вуличне освітлення'}
           </h3>
-          <ProductCarousel currentProductId={id} />
+          <ProductsCarousel
+            currentProductId={id}
+            productsSectionId="products-lighting"
+          />
         </>
-        : <p>{'Товар не знайдено'}</p>
+        : <div className='product-not-found'>
+            <p>{'Товар не знайдено'}</p>
+          </div>
       }
     </div>
   );
 };
 
-export default ProductPage;
+export default LightingProductPage;

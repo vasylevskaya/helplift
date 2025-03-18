@@ -292,7 +292,6 @@
 .characteristic-title,
 .characteristic-text {
   margin: 10px 0;
-  white-space: nowrap;
 }
 
 .characteristic-title {
@@ -345,7 +344,8 @@
   margin-top: 40px;
 }
 
-.product-page .tabs {
+.product-page .tabs,
+.product-page .product-description {
   border: 1px solid #999b9e6b;
   border-radius: 20px;
   padding: 40px;
@@ -356,6 +356,11 @@
   .product-page .tabs {
     padding: 30px 20px;
   }
+}
+
+.product-page .product-description h5 {
+  font-size: 20px;
+  margin-top: 15px;
 }
 
 .tabs_btns {
@@ -448,6 +453,15 @@
     margin: 20px auto;
     font-size: 18px;
   }
+}
+
+.product-not-found {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 /* ====== Product Page Carousel START ====== */

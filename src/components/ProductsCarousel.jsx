@@ -2,19 +2,29 @@ import React, { useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import ButtonCircle from './ButtonCircle';
 import ProductCard from './ProductCard';
-import products from '../assets/products.json'; /* !! get images from public folder !! */
 import ROUTES from '../assets/routes.json';
 
-const ProductCarousel = ({
+import productsLifts from '../assets/products-lifts.json'; /* !! get images from public folder !! */
+import productsLighting from '../assets/products-lighting.json'; /* !! get images from public folder !! */
+
+const ProductsCarousel = ({
   /* optional, to exclude a product that is displayed on ProductPage from the carousel */
   currentProductId,
+  productsSectionId
 }) => {
   const carouselRef = useRef(null);
 
   /* check if its product page */
   const { pathname } = useLocation();
   const { id } = useParams();
-  const isProductPage = pathname === ROUTES.product_page.replace(':id', id);
+  const route = productsSectionId === 'products-lifts'
+    ? ROUTES.product_lifts_page
+    : ROUTES.product_lighting_page
+  const isProductPage = pathname === route.replace(':id', id);
+
+  const products = productsSectionId === 'products-lifts'
+    ? productsLifts
+    : productsLighting
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -41,6 +51,7 @@ const ProductCarousel = ({
             <ProductCard
               key={product.id}
               product={product}
+              route={route}
               isProductPage={isProductPage}
             />
         ))}
@@ -52,4 +63,4 @@ const ProductCarousel = ({
   );
 };
 
-export default ProductCarousel;
+export default ProductsCarousel;
