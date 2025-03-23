@@ -180,8 +180,22 @@
   padding: 130px 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items:  center;
   justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .section-products {
+    min-height: unset;
+  }
+
+  #products-lifts {
+    padding-bottom: 65px;
+  }
+
+  #products-lighting {
+    padding-top: 65px;
+  }
 }
 
 .section-products_title {

@@ -27,7 +27,7 @@ const LightingProductPage = () => {
   }, [])
 
   return (
-    <div className='product-page'>
+    <div className='product-page lighting-page'>
       <Header className='light' />
       {product
         ? <>

@@ -516,6 +516,13 @@
   }
 }
 
+@media (max-width: 700px) {
+  .lighting-page .product-carousel {
+    justify-content: center;
+  }
+  
+}
+
 .product-page .product-card-placeholder {
   width: 30px;
 }
