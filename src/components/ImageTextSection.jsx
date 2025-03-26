@@ -50,7 +50,7 @@ const ImageTextSection = () => {
           Виробництво підйомників
         </p>
         <p className="section-image-text_content_subtitle">
-          для людей з інвалідністю
+          для людей з інвалідністю <br/> та вуличного освітлення
         </p>
       </div>
     </div>
